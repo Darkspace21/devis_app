@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -44,6 +46,43 @@ class User implements UserInterface
      */
     private $isVerified = false;
 
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nom;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $prenom;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $adresse;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $gamme_produit;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Vehicule::class, mappedBy="User", orphanRemoval=true)
+     */
+    private $vehicule;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Devis::class, mappedBy="User", orphanRemoval=true)
+     */
+    private $devis;
+
+    public function __construct()
+    {
+        $this->vehicule = new ArrayCollection();
+        $this->devis = new ArrayCollection();
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -140,5 +179,117 @@ class User implements UserInterface
     public function isAdmin(): bool
     {
         return in_array(self::ROLE_ADMIN, $this->getRoles());
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+        public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getGammeProduit(): ?string
+    {
+        return $this->gamme_produit;
+    }
+
+    public function setGammeProduit(?string $gamme_produit): self
+    {
+        $this->gamme_produit = $gamme_produit;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Vehicule[]
+     */
+    public function getVehicule(): Collection
+    {
+        return $this->vehicule;
+    }
+
+    public function addVehicule(Vehicule $vehicule): self
+    {
+        if (!$this->vehicule->contains($vehicule)) {
+            $this->vehicule[] = $vehicule;
+            $vehicule->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicule(Vehicule $vehicule): self
+    {
+        if ($this->vehicule->removeElement($vehicule)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicule->getUser() === $this) {
+                $vehicule->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Devis[]
+     */
+    public function getDevis(): Collection
+    {
+        return $this->devis;
+    }
+
+    public function addDevis(Devis $devis): self
+    {
+        if (!$this->devis->contains($devis)) {
+            $this->devis[] = $devis;
+            $devis->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevis(Devis $devis): self
+    {
+        if ($this->devis->removeElement($devis)) {
+            // set the owning side to null (unless already changed)
+            if ($devis->getUser() === $this) {
+                $devis->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

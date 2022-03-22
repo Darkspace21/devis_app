@@ -27,6 +27,14 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
      */
     private $user;
 
+    private $selector;
+
+    private $hashedToken;
+
+    private $requestedAt;
+
+    private $expiresAt;
+
     public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {
         $this->user = $user;
@@ -41,5 +49,60 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     public function getUser(): object
     {
         return $this->user;
+    }
+
+    public function getSelector(): ?string
+    {
+        return $this->selector;
+    }
+
+    public function setSelector(string $selector): self
+    {
+        $this->selector = $selector;
+
+        return $this;
+    }
+
+    public function getHashedToken(): string
+    {
+        return $this->hashedToken;
+    }
+
+    public function setHashedToken(string $hashedToken): self
+    {
+        $this->hashedToken = $hashedToken;
+
+        return $this;
+    }
+
+    public function getRequestedAt(): \DateTimeImmutable
+    {
+        return $this->requestedAt;
+    }
+
+    public function setRequestedAt(\DateTimeImmutable $requestedAt): self
+    {
+        $this->requestedAt = $requestedAt;
+
+        return $this;
+    }
+
+    public function getExpiresAt(): \DateTimeImmutable
+    {
+        return $this->expiresAt;
+    }
+
+    public function setExpiresAt(\DateTimeImmutable $expiresAt): self
+    {
+        $this->expiresAt = $expiresAt;
+
+        return $this;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
