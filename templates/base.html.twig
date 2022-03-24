@@ -32,6 +32,10 @@
                 font-size: 3.5rem;
             }
         }
+        #deco{
+            float:"right";
+            color:"blue";
+        }
     </style>
 
     {% block javascripts %}
@@ -50,11 +54,21 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item">
+                    <li class="nav-item" id="1">
                         <a class="nav-link active" aria-current="page"
                            href="{{ path('admin_dashboard') }}">Dashboard</a>
                     </li>
                 {% endif %}
+                {% if user is defined %}
+                <li class="nav-item" id="2">
+                    <a class="nav-link active" aria-current="page"
+                    href="{{ path('user_show', {'id': user.id}) }}">profil</a>
+                </li>
+                {% endif %}
+                <li class="nav-item" id="deco">
+                    <a class="nav-link active" aria-current="page"
+                       href="{{ path('app_logout') }}">deconnexion</a>
+                </li>
             </ul>
         </div>
     </div>
