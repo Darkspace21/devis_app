@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vehicule index{% endblock %}
+
+{% block body %}
+    <h1>Liste de vos Véhicules </h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                {# <th>Id</th> #}
+                <th>Immat</th>
+                <th>Marque</th>
+                <th>Vinh</th>
+                <th>Modele</th>
+                <th>Version</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vehicule in vehicules %}
+            <tr>
+                {# <td>{{ vehicule.id }}</td> #}
+                <td>{{ vehicule.immat }}</td>
+                <td>{{ vehicule.marque }}</td>
+                <td>{{ vehicule.vinh }}</td>
+                <td>{{ vehicule.modele }}</td>
+                <td>{{ vehicule.version }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('vehicule_show', {'id': vehicule.id}) }}">afficher</a>
+                    <a class="btn btn-warning" href="{{ path('vehicule_edit', {'id': vehicule.id}) }}">editer</a>
+                    <a class="btn btn-danger" href="{{ path('vehicule_delete', {'id': vehicule.id}) }}">supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">aucun résultat trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" href="{{ path('vehicule_new') }}">Ajouter un véhicule</a>
+{% endblock %}

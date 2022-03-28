@@ -1,0 +1,28 @@
+
+{% extends 'base.html.twig' %}
+{% block title %}Edit Vehicule{% endblock %}
+
+{% block body %}
+    <h1>Edit Vehicule</h1>
+    <table>
+        <tr>
+            <td>
+                {{ include('vehicule/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+            </td>
+            <td class="alignement">
+                <a class="btn btn-primary"href="{{ path('vehicule_index') }}">Retour à la liste des véhicules</a>
+            </td>
+            <td class="alignement">
+                {{ include('vehicule/_delete_form.html.twig') }}
+            </td>
+        </tr>
+    </table>
+
+    <style>
+        .alignement{
+            vertical-align: bottom; 
+        }
+    </style>
+
+{% endblock %}
+

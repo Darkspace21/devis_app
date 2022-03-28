@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Vehicule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Cache\VoidCache;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,6 +44,16 @@ class VehiculeRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function listeVehicule(int $userId){
+        $conn = $this->getEntityManager()->getConnection();
+            $sql = '
+            SELECT * FROM `vehicule` WHERE user_id=:value;
+            ';
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(":value"=>$userId));
+            return $stmt->fetchAll();
     }
 
     // /**

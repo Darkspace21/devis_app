@@ -1,0 +1,48 @@
+{{ form_start(form) }}
+    {# {{ form_widget(form) }} #}
+    <table>
+        <tr>
+            <td>
+                {{ form_label(form.immat,'Immatriculation') }}
+            </td>
+            <td>
+                {{ form_widget(form.immat) }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form_label(form.marque) }}
+            </td>
+            <td>
+                {{ form_widget(form.marque) }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form_label(form.modele) }}
+            </td>
+            <td>
+                {{ form_widget(form.modele) }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form_label(form.version) }}
+            </td>
+            <td>
+                {{ form_widget(form.version) }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form_label(form.vinh) }}
+            </td>
+            <td>
+                {{ form_widget(form.vinh) }}
+            </td>
+        </tr>
+    </table>
+    
+    <p></p>
+    <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

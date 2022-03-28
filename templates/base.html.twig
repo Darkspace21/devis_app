@@ -64,11 +64,12 @@
                     <a class="nav-link active" aria-current="page"
                     href="{{ path('user_show', {'id': user.id}) }}">profil</a>
                 </li>
-                {% endif %}
                 <li class="nav-item" id="deco">
                     <a class="nav-link active" aria-current="page"
                        href="{{ path('app_logout') }}">deconnexion</a>
                 </li>
+                {% endif %}
+
             </ul>
         </div>
     </div>

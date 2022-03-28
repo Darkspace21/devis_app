@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass=VehiculeRepository::class)
@@ -43,10 +44,9 @@ class Vehicule
     private $version;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="vehicule")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $User;
+    private $userId;
 
     public function getId(): ?int
     {
@@ -113,14 +113,14 @@ class Vehicule
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUserId(): ?int
     {
-        return $this->user;
+        return $this->user->getId();
     }
 
-    public function setUser(?User $User): self
+    public function setUserId(?int $userId): self
     {
-        $this->User = $User;
+        $this->userId = $userId;
 
         return $this;
     }

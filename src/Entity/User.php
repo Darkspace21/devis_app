@@ -245,23 +245,23 @@ class User implements UserInterface
     {
         if (!$this->vehicule->contains($vehicule)) {
             $this->vehicule[] = $vehicule;
-            $vehicule->setUser($this);
+            $vehicule->setUserId($this->user->getId());
         }
 
         return $this;
     }
 
-    public function removeVehicule(Vehicule $vehicule): self
-    {
-        if ($this->vehicule->removeElement($vehicule)) {
-            // set the owning side to null (unless already changed)
-            if ($vehicule->getUser() === $this) {
-                $vehicule->setUser(null);
-            }
-        }
+    // public function removeVehicule(Vehicule $vehicule): self
+    // {
+    //     if ($this->vehicule->removeElement($vehicule)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($vehicule->getUser() === $this) {
+    //             $vehicule->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection|Devis[]
