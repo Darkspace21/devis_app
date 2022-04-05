@@ -54,18 +54,38 @@
             <tr>
                 <td>{{form_label(form.immat,'Immatriculation')}}</td>
                 <td>{{form_widget(form.immat)}}</td>
-                <td>{{form_label(form.modele)}}</td>
+                <td><br><br></td>
                 <td><div class="select">
-                    <select>
-                      <option value="modele">Modèle</option>
+                    {% if marque is defined and modele =='' %}
+                    <select id="marque" name="marque" onchange="myFunction1()">
+                      <option value="marque">Marque</option>
                       {% for M in marque %}
-                          <option value={{M.marque}}>{{M.marque}}</option>
+                          <option value={{M.id_marque}} >{{M.marque}}</option>
                       {% endfor %} 
                     </select>
-                  </div></td>
+                    {% endif %}
+                    {% if modele is defined and modele !='' and version !='' %}
+                    <select id="modele" name="modele" onselect="myFunction()">
+                        <option value="modele">Modèle</option>
+                        {% for M in modele %}
+                            <option value={{M.id_marque}}>{{M.marque}}</option>
+                        {% endfor %} 
+                    </select>
+                    {% endif %}
+                    
+                    {% if version is defined %}
+                    <select id="version" name="version" onselect="myFunction()">
+                        <option value="version">Version</option>
+                        {% for M in marque %}
+                            <option value={{M.id_marque}}>{{M.marque}}</option>
+                        {% endfor %} 
+                    </select>
+                    {% endif %}
+                  </div>
+                </td>
                 <td><div class="label">{{form_label(form.TypePrestation)}}</div></td>
                 <td><div class="select">
-                    <select>
+                    <select id="TypePrestation" name="TypePrestation">
                       <option value="Type prestation">Type prestation</option>
                       {% for T in TypePresta %}
                           <option value{{T}}>{{T}}</option>
@@ -83,3 +103,10 @@
     
 </div>
 {{ form_end(form,{'render_rest': false}) }}
+
+<script>
+    function myFunction1() {
+      alert(document.getElementById('marque').value);
+      document.forms["prechargement"].submit();
+    }
+</script>

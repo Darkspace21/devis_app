@@ -34,7 +34,6 @@ class DevisController extends AbstractController
         $defaultData = ['message' => 'Type your message here'];
         //$form = $this->createForm(DevisType::class, $devi);
         //recuperer le type de prestation
-        $modele=$devisRepository->listeModele();
         $marque=$devisRepository->listeMarque();
         // dump($modele);
         $typePresta=$typePrestationRepository->findAll();
@@ -45,8 +44,10 @@ class DevisController extends AbstractController
         //dump($listePresta);
         //dump($typePresta);
         $form = $this->createFormBuilder($defaultData)
-            ->add('immat', TextType::class)
-            ->add('modele', TextType::class)
+            ->add('immat', TextType::class,['required' => false,])
+            ->add('marque', TextType::class,['required' => false,])
+            ->add('modele', TextType::class,['required' => false,])
+            ->add('version', TextType::class,['required' => false,])
             ->add('TypePrestation', ChoiceType::class,[
                 'choices'=>[
                     // $listePresta2,
@@ -57,14 +58,68 @@ class DevisController extends AbstractController
             ])
             ->getForm();
         $form->handleRequest($request);
+        $modele='';
+        $version='';
         // dump($marque);
         // die();
        
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $data = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($data);
-            $entityManager->flush();
+            $data['TypePrestation']=$_POST['TypePrestation'];
+            // dump($_POST['marque']);
+            // dump($_POST['TypePrestation']);
+            if (isset($_POST['immat'])){
+                $data['immat']=$_POST['immat'];
+                // lancer la recherche pour avoir les infos de la voiture
+                // lancer la recherche pour les différents devis
+            }else{
+                if (isset($_POST['marque'])&& isset($_POST['modele']) && isset($_POST['version']) ){
+                    $data['marque']=$_POST['marque'];
+                    $data['modele']=$_POST['modele'];
+                    $data['version']=$_POST['version'];
+
+                    return $this->render('devis/new.html.twig', [
+                        'devi' => $form,
+                        'form' => $form->createView(),
+                        'TypePresta'=>$listePresta,
+                        'modele'=>$modele,
+                        'marque'=>$marque,
+                        'version'=>$version
+                    ]);
+                    // lancer la recherche pour les différents devis
+                }elseif( isset($_POST['marque'])&& isset($_POST['modele'])){
+                    $data['marque']=$_POST['marque'];
+                    $data['modele']=$_POST['modele'];
+
+                    return $this->render('devis/new.html.twig', [
+                        'devi' => $form,
+                        'form' => $form->createView(),
+                        'TypePresta'=>$listePresta,
+                        'modele'=>$modele,
+                        'marque'=>$marque,
+                        'version'=>$version
+                    ]);
+                    // appeler la fonction pour la version
+                }elseif(isset($_POST['marque'])){
+                    $data['marque']=$_POST['marque'];
+                    //appeler la fonction modele
+                    $modele=$devisRepository->listeModele($_POST['marque']);
+
+                    return $this->render('devis/new.html.twig', [
+                        'devi' => $form,
+                        'form' => $form->createView(),
+                        'TypePresta'=>$listePresta,
+                        'modele'=>$modele,
+                        'marque'=>$marque,
+                        'version'=>$version
+                    ]);
+                }
+            }
+
+            
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($data);
+            // $entityManager->flush();
             
             return $this->redirectToRoute('devis_index');
         }

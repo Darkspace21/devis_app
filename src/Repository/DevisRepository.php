@@ -46,11 +46,11 @@ class DevisRepository extends ServiceEntityRepository
     }
 
 
-    public function listeModele(){
+    public function listeModele($marque){
         $conn = $this->getEntityManager()->getConnection();
             $sql = "
             select DISTINCT
-            marque.bez as marque
+            marque.bez as marque, marque.lbeznr as id_marque
             from db_devis.t012 as marque, db_devis.t100,
             db_devis.t110,
             db_devis.t120,
@@ -61,10 +61,11 @@ class DevisRepository extends ServiceEntityRepository
             and db_devis.t100.lbeznr = marque.lbeznr
             and db_devis.t122.KTypeNR = t120.ktypnr
             and db_devis.t122.lkz='F'
-            order by marque asc;
+            and marque.lbeznr =:marque";
+            $sql.=" order by marque asc;
             ";
             $stmt = $conn->prepare($sql);
-            $stmt->execute();
+            $stmt->execute(array(":marque"=>$marque));
             return $stmt->fetchAll();
     }
 
@@ -72,7 +73,7 @@ class DevisRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $sql = "
         select DISTINCT
-        marque.bez as marque ,marque.lbeznr
+        marque.bez as marque ,marque.lbeznr as id_marque
         from db_devis.t012 as marque, db_devis.t100,
         db_devis.t110,
         db_devis.t120,
