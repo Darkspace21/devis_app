@@ -38,7 +38,7 @@
         </tbody>
     </table>
     <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-primary">Editer</a>
-    <button type="button" class="btn btn-success">Créer un devis <a href=""></a></button>
+    <a href="{{ path('devis_new') }}" class="btn btn-success">Créer un devis </a>
     <a href="{{ path('vehicule_new') }}"class="btn btn-primary">ajouter une voiture</a>
 
 {% endblock %}

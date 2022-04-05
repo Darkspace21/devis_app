@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PiecesNecessaire index{% endblock %}
+
+{% block body %}
+    <h1>PiecesNecessaire index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Marque</th>
+                <th>Prix</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pieces_necessaire in pieces_necessaires %}
+            <tr>
+                <td>{{ pieces_necessaire.id }}</td>
+                <td>{{ pieces_necessaire.nom }}</td>
+                <td>{{ pieces_necessaire.marque }}</td>
+                <td>{{ pieces_necessaire.prix }}</td>
+                <td>
+                    <a href="{{ path('pieces_necessaire_show', {'id': pieces_necessaire.id}) }}">show</a>
+                    <a href="{{ path('pieces_necessaire_edit', {'id': pieces_necessaire.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('pieces_necessaire_new') }}">Create new</a>
+{% endblock %}

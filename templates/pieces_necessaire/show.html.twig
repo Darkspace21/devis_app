@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PiecesNecessaire{% endblock %}
+
+{% block body %}
+    <h1>PiecesNecessaire</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pieces_necessaire.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ pieces_necessaire.nom }}</td>
+            </tr>
+            <tr>
+                <th>Marque</th>
+                <td>{{ pieces_necessaire.marque }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ pieces_necessaire.prix }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('pieces_necessaire_index') }}">back to list</a>
+
+    <a href="{{ path('pieces_necessaire_edit', {'id': pieces_necessaire.id}) }}">edit</a>
+
+    {{ include('pieces_necessaire/_delete_form.html.twig') }}
+{% endblock %}

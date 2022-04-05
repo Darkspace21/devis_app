@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ListeOperation index{% endblock %}
+
+{% block body %}
+    <h1>ListeOperation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom_operation</th>
+                <th>Temps_total</th>
+                <th>Prix_operation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for liste_operation in liste_operations %}
+            <tr>
+                <td>{{ liste_operation.id }}</td>
+                <td>{{ liste_operation.nomOperation }}</td>
+                <td>{{ liste_operation.tempsTotal ? liste_operation.tempsTotal|date('H:i:s') : '' }}</td>
+                <td>{{ liste_operation.prixOperation }}</td>
+                <td>
+                    <a href="{{ path('liste_operation_show', {'id': liste_operation.id}) }}">show</a>
+                    <a href="{{ path('liste_operation_edit', {'id': liste_operation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('liste_operation_new') }}">Create new</a>
+{% endblock %}

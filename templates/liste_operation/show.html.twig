@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ListeOperation{% endblock %}
+
+{% block body %}
+    <h1>ListeOperation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ liste_operation.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom_operation</th>
+                <td>{{ liste_operation.nomOperation }}</td>
+            </tr>
+            <tr>
+                <th>Temps_total</th>
+                <td>{{ liste_operation.tempsTotal ? liste_operation.tempsTotal|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Prix_operation</th>
+                <td>{{ liste_operation.prixOperation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('liste_operation_index') }}">back to list</a>
+
+    <a href="{{ path('liste_operation_edit', {'id': liste_operation.id}) }}">edit</a>
+
+    {{ include('liste_operation/_delete_form.html.twig') }}
+{% endblock %}

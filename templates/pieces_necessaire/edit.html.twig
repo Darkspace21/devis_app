@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PiecesNecessaire{% endblock %}
+
+{% block body %}
+    <h1>Edit PiecesNecessaire</h1>
+
+    {{ include('pieces_necessaire/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('pieces_necessaire_index') }}">back to list</a>
+
+    {{ include('pieces_necessaire/_delete_form.html.twig') }}
+{% endblock %}

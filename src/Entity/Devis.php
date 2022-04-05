@@ -28,10 +28,9 @@ class Devis
     private $nb_heure_total;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="devis")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $User;
+    private $userId;
 
     /**
      * @ORM\OneToOne(targetEntity=TypePrestation::class, cascade={"persist", "remove"})
@@ -69,14 +68,14 @@ class Devis
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUserId(): ?int
     {
-        return $this->User;
+        return $this->user->getId();
     }
 
-    public function setUser(?User $User): self
+    public function setUserId(?int $userId): self
     {
-        $this->User = $User;
+        $this->userId = $userId;
 
         return $this;
     }

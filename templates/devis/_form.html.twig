@@ -1,0 +1,85 @@
+
+<style>
+    .dropdown-menu{
+        width: 15%;
+        height: 100px;
+        overflow-y: scroll;
+    }
+  
+  
+  .bloc {
+    display:inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items : center;
+    justify-content: center;
+  }
+  
+  /*Réinitilaisation de la liste déroulante*/
+  select {
+    outline: 0;
+    border: 0 !important;
+    background: #F9F9F9;
+    background-image: none;
+    box-shadow: none;
+    font-size: 1.2em;
+  }
+  
+  /* Mise en forme de la balise select*/
+  select {
+    line-height: 1.5;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding-left: 15px;
+    background-color: #6c757d;
+    color:white;
+    cursor: pointer;
+    border-radius: 0.25rem;
+  }
+  td{
+      margin-right: 5%;
+      margin-left: 2%;
+  }
+  option{
+    border-radius: 0.25rem;
+  }
+
+</style>
+<div class="dropdown">
+    {{ form_start(form) }}
+
+    <div class="bloc">
+        <table>
+            <tr>
+                <td>{{form_label(form.immat,'Immatriculation')}}</td>
+                <td>{{form_widget(form.immat)}}</td>
+                <td>{{form_label(form.modele)}}</td>
+                <td><div class="select">
+                    <select>
+                      <option value="modele">Modèle</option>
+                      {% for M in marque %}
+                          <option value={{M.marque}}>{{M.marque}}</option>
+                      {% endfor %} 
+                    </select>
+                  </div></td>
+                <td><div class="label">{{form_label(form.TypePrestation)}}</div></td>
+                <td><div class="select">
+                    <select>
+                      <option value="Type prestation">Type prestation</option>
+                      {% for T in TypePresta %}
+                          <option value{{T}}>{{T}}</option>
+                      {% endfor %} 
+                    </select>
+                  </div></td>
+                  <td>
+                    <button class="btn btn-primary">{{ button_label|default('Rechercher') }}</button>
+                  </td>
+            </tr>
+        </table>
+        
+        
+    </div>
+    
+</div>
+{{ form_end(form,{'render_rest': false}) }}

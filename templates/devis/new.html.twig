@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Devis{% endblock %}
+
+{% block body %}
+<style>
+    .recherche{
+        margin-left: 5%;
+    }
+</style>
+<div class="recherche">
+    <h1>Créer un Devis</h1>
+    
+    {{ include('devis/_form.html.twig') }}
+
+    <a class="btn btn-primary"href="{{ path('devis_index') }}">accueil</a>
+</div>
+{% endblock %}
