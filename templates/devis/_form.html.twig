@@ -28,7 +28,7 @@
   /* Mise en forme de la balise select*/
   select {
     line-height: 1.5;
-    width: 100%;
+    width: 300px;
     height: 100%;
     margin: 0;
     padding-left: 15px;
@@ -46,7 +46,9 @@
   }
 
 </style>
+
 <div class="dropdown">
+    
     {{ form_start(form) }}
 
     <div class="bloc">
@@ -55,33 +57,35 @@
                 <td>{{form_label(form.immat,'Immatriculation')}}</td>
                 <td>{{form_widget(form.immat)}}</td>
                 <td><br><br></td>
-                <td><div class="select">
-                    {% if marque is defined and modele =='' %}
-                    <select id="marque" name="marque" onchange="myFunction1()">
-                      <option value="marque">Marque</option>
-                      {% for M in marque %}
-                          <option value={{M.id_marque}} >{{M.marque}}</option>
-                      {% endfor %} 
-                    </select>
-                    {% endif %}
-                    {% if modele is defined and modele !='' and version !='' %}
-                    <select id="modele" name="modele" onselect="myFunction()">
-                        <option value="modele">Modèle</option>
-                        {% for M in modele %}
-                            <option value={{M.id_marque}}>{{M.marque}}</option>
-                        {% endfor %} 
-                    </select>
-                    {% endif %}
-                    
-                    {% if version is defined %}
-                    <select id="version" name="version" onselect="myFunction()">
-                        <option value="version">Version</option>
-                        {% for M in marque %}
-                            <option value={{M.id_marque}}>{{M.marque}}</option>
-                        {% endfor %} 
-                    </select>
-                    {% endif %}
-                  </div>
+                <td>
+                    <div class="select">
+                        {% if version is defined and version !='' %}
+                            <select id="version" name="version">
+                                {# {% for Mar in marque %}
+                                <optgroup  label="{{Mar.marque}}"  
+                                    {% if modele is defined and modele !='' %}
+                                        {% for Mo in modele %}
+                                            {% if  Mar.marque == Mo.marque  %}
+                                                <optgroup label="{{Mo.modele}}">
+                                                {% if version is defined and version !='' %}
+                                                    {% for V in version %}
+                                                        {% if  Mo.modele == V.modele  %}
+                                                            <option value="{{V.marque}}/{{V.modele}}/{{V.version}}">{{V.version}}</option>
+                                                        {% endif %}
+                                                    {% endfor %} 
+                                                {% endif %}
+                                                </optgroup>
+                                            {% endif %}
+                                        {% endfor %} 
+                                    {% endif %}
+                                    </optgroup>
+                                {% endfor %} #}
+                                {% for V in version %}
+                                            <option value="{{V.marque}}/{{V.modele}}/{{V.version}}">{{V.marque}}/{{V.modele}}/{{V.version}}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
                 </td>
                 <td><div class="label">{{form_label(form.TypePrestation)}}</div></td>
                 <td><div class="select">
@@ -101,12 +105,14 @@
         
     </div>
     
+    
 </div>
 {{ form_end(form,{'render_rest': false}) }}
 
 <script>
-    function myFunction1() {
-      alert(document.getElementById('marque').value);
-      document.forms["prechargement"].submit();
+    function bonjour(){
+        var selectedValue = document.getElementById("test1").value;
+        console.log(selectedValue);
+
     }
 </script>

@@ -9,6 +9,7 @@ use App\Repository\DevisRepository;
 use App\Repository\TypePrestationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,8 +35,16 @@ class DevisController extends AbstractController
         $defaultData = ['message' => 'Type your message here'];
         //$form = $this->createForm(DevisType::class, $devi);
         //recuperer le type de prestation
+        $marque='';
+        $modele='';
+        $version='';
+        if (!isset($modeleF)){
+            $marqueF='';
+        }
         $marque=$devisRepository->listeMarque();
-        // dump($modele);
+        $modele=$devisRepository->listeModele();
+        $version=$devisRepository->listeVersion();
+        // dump($marque);
         $typePresta=$typePrestationRepository->findAll();
         $listePresta=[];
         foreach($typePresta as $valeur){
@@ -58,78 +67,39 @@ class DevisController extends AbstractController
             ])
             ->getForm();
         $form->handleRequest($request);
-        $modele='';
-        $version='';
         // dump($marque);
         // die();
        
         if ($form->isSubmitted()) {
             $data = $form->getData();
             $data['TypePrestation']=$_POST['TypePrestation'];
-            // dump($_POST['marque']);
-            // dump($_POST['TypePrestation']);
+            //dump($_POST['marque']);
+            //dump($_POST['TypePrestation']);
             if (isset($_POST['immat'])){
                 $data['immat']=$_POST['immat'];
                 // lancer la recherche pour avoir les infos de la voiture
                 // lancer la recherche pour les différents devis
+                
             }else{
-                if (isset($_POST['marque'])&& isset($_POST['modele']) && isset($_POST['version']) ){
-                    $data['marque']=$_POST['marque'];
-                    $data['modele']=$_POST['modele'];
-                    $data['version']=$_POST['version'];
-
-                    return $this->render('devis/new.html.twig', [
-                        'devi' => $form,
-                        'form' => $form->createView(),
-                        'TypePresta'=>$listePresta,
-                        'modele'=>$modele,
-                        'marque'=>$marque,
-                        'version'=>$version
-                    ]);
-                    // lancer la recherche pour les différents devis
-                }elseif( isset($_POST['marque'])&& isset($_POST['modele'])){
-                    $data['marque']=$_POST['marque'];
-                    $data['modele']=$_POST['modele'];
-
-                    return $this->render('devis/new.html.twig', [
-                        'devi' => $form,
-                        'form' => $form->createView(),
-                        'TypePresta'=>$listePresta,
-                        'modele'=>$modele,
-                        'marque'=>$marque,
-                        'version'=>$version
-                    ]);
-                    // appeler la fonction pour la version
-                }elseif(isset($_POST['marque'])){
-                    $data['marque']=$_POST['marque'];
-                    //appeler la fonction modele
-                    $modele=$devisRepository->listeModele($_POST['marque']);
-
-                    return $this->render('devis/new.html.twig', [
-                        'devi' => $form,
-                        'form' => $form->createView(),
-                        'TypePresta'=>$listePresta,
-                        'modele'=>$modele,
-                        'marque'=>$marque,
-                        'version'=>$version
-                    ]);
-                }
+                $marqueModeleVersion=$_POST['version'];
+                $marqueModeleVersion = explode("/", $marqueModeleVersion);
+                $marque= $marqueModeleVersion[0];
+                $modele= $marqueModeleVersion[1];
+                $version= $marqueModeleVersion[2];
+                dump($marque,$modele,$version);
+                die();
             }
-
-            
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($data);
-            // $entityManager->flush();
-            
-            return $this->redirectToRoute('devis_index');
+            //afficher la liste des offres pour le véhicule et le type de presta
+             
         }
-
+        
         return $this->render('devis/new.html.twig', [
             'devi' => $form,
             'form' => $form->createView(),
             'TypePresta'=>$listePresta,
             'modele'=>$modele,
-            'marque'=>$marque
+            'marque'=>$marque,
+            'version'=>$version
         ]);
     }
 
