@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Devis{% endblock %}
+{% block body %}
+<style>
+
+    .marge{
+        margin-left: 5%;
+        margin-right: 5%;
+        
+    }
+    .checkbox{
+        margin: 0 auto;
+        width: 100px;
+    }
+    #valider{
+        margin-top: 2%;	
+        float: right;
+    }
+</style>
+<form  action="final" class="input-group" method="POST">
+    <div class="marge">
+        <h1>Selectionner le ou les Types de produits</h1>
+        {% if ktypnr is defined %}
+            <p hidden><input type="checkbox" checked="checked" name="ktypnr" id="ktypnr" value="{{ktypnr.ktypnr}}"/>{{ktypnr.ktypnr}}</p>
+        {% endif %}
+        {% if listePieces is defined %}
+        
+            <h5> obligatoire</h5>
+            {% for piece in listePieces %}
+                {% if piece.obligatoire == 1 %}
+                    <div class="card w-50">
+                        <div class="card-body">
+                            <p> <input type="checkbox" checked="checked"  onclick="return false" class="checkbox" name="piece2[]" id="piece2" value="{{piece.nom}}"/>{{piece.nom}} </p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <h5> facultatif</h5>
+            {% for piece in listePieces %}
+                {% if piece.obligatoire == 0 %}
+                    <div class="card w-50">
+                        <div class="card-body">
+                            <p> <input name="piece[]" value="{{piece.nom}}" id="piece" type="checkbox" checked="checked" class="checkbox"/>{{piece.nom}} </p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <div class=" w-50" >
+            <button  id="valider" type="submit" class="btn btn-primary">Valider</button>
+        </div>
+    </div>
+    
+</form>
+{% endblock %}
+

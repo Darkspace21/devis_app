@@ -72,7 +72,7 @@ class DevisController extends AbstractController
        
         if ($form->isSubmitted()) {
             $data = $form->getData();
-            $data['TypePrestation']=$_POST['TypePrestation'];
+            $presta=$_POST['TypePrestation'];
             //dump($_POST['marque']);
             //dump($_POST['TypePrestation']);
             if (isset($_POST['immat'])){
@@ -86,11 +86,17 @@ class DevisController extends AbstractController
                 $marque= $marqueModeleVersion[0];
                 $modele= $marqueModeleVersion[1];
                 $version= $marqueModeleVersion[2];
-                dump($marque,$modele,$version);
-                die();
+                //dump($marque,$modele,$version,$presta);
+                $ktpynr=$devisRepository->ktypnr($marque,$modele,$version);
+                dump($ktpynr);
+                $liste_pieces=$devisRepository->pieces_necessaire($presta);
+                dump($liste_pieces);
+                return $this->redirectToRoute('devis_new_liste_pieces', array('ktpynr' => $ktpynr,'liste_pieces'=>$liste_pieces));
             }
             //afficher la liste des offres pour le véhicule et le type de presta
-             
+            // envoyer le type de presta puis toutes les infos de la voiture afin de retourner les différent garage et les différents prix des garages
+            // le prix proposé est egal au prix de chaque pieces + le taux horaire de chaque pieces * le temps pour remplacer la piece.
+
         }
         
         return $this->render('devis/new.html.twig', [
@@ -100,6 +106,34 @@ class DevisController extends AbstractController
             'modele'=>$modele,
             'marque'=>$marque,
             'version'=>$version
+        ]);
+    }
+
+    #[Route('/new/liste_pieces/', name: 'devis_new_liste_pieces', methods: ['GET', 'POST'])]
+    public function listePieces(): Response
+    {
+        $ktypnr=$_GET['ktpynr'];
+        $liste_pieces=$_GET['liste_pieces'];
+        //dump($ktypnr,$liste_pieces);
+        
+        return $this->render('devis/new/liste_pieces.html.twig', [
+            'ktypnr' =>$ktypnr ,
+            'listePieces'=>$liste_pieces
+        ]);
+    }
+    #[Route('/new/liste_pieces/final', name: 'final', methods: ['GET', 'POST'])]
+    public function final(): Response
+    {
+        $liste_pieces2=$_POST['piece2'];
+        $liste_pieces=$_POST['piece'];
+        $ktypnr=$_POST['ktypnr'];
+        dump($liste_pieces,$liste_pieces2,$ktypnr);
+        //dump($ktypnr,$liste_pieces);
+        //charger la liste des resultats + renvoyer vers devis 
+        
+        return $this->render('devis/new/liste_pieces/final.html.twig', [
+            'ktypnr' =>$ktypnr ,
+            'listePieces'=>$liste_pieces
         ]);
     }
 

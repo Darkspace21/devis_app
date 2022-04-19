@@ -75,6 +75,46 @@ class DevisRepository extends ServiceEntityRepository
             return $stmt->fetchAll();
     }
 
+    public function ktypnr($marque,$modele,$version){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+        select DISTINCT db_devis.t120.ktypnr,
+        marque.bez as marque,
+        modele.bez as modele,
+        vehicule.bez as vehicule
+        from db_devis.t012 as marque, db_devis.t100,
+        db_devis.t012 as modele, db_devis.t110,
+        db_devis.t012 as vehicule, db_devis.t120
+        where marque.sprachnr = '006'
+        and modele.sprachnr = '006'
+        and vehicule.sprachnr = '006'
+        and db_devis.t120.kmodnr = t110.kmodnr
+        and db_devis.t110.hernr = t100.hernr
+        and db_devis.t100.lbeznr = marque.lbeznr
+        and db_devis.t110.lbeznr = modele.lbeznr
+        and db_devis.t120.lbeznr = vehicule.lbeznr
+        and marque.bez=:marque
+        and modele.bez=:modele
+        and vehicule.bez=:version
+        ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(":marque"=>$marque,":modele"=>$modele,":version"=>$version));
+            return $stmt->fetch();
+    }
+
+    public function pieces_necessaire($presta){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT pieces_necessaire.*, type_prestation_pieces_necessaire.obligatoire FROM `pieces_necessaire`
+        inner join type_prestation_pieces_necessaire on type_prestation_pieces_necessaire.pieces_necessaire_id=pieces_necessaire.id
+        inner join type_prestation on type_prestation_pieces_necessaire.type_prestation_id=type_prestation.id
+        where type_prestation.nom_prestation =:presta
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":presta"=>$presta));
+        return $stmt->fetchAll();
+    }
+
     
 
     // /**
