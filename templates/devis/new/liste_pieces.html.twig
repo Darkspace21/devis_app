@@ -31,7 +31,7 @@
                 {% if piece.obligatoire == 1 %}
                     <div class="card w-50">
                         <div class="card-body">
-                            <p> <input type="checkbox" checked="checked"  onclick="return false" class="checkbox" name="piece2[]" id="piece2" value="{{piece.nom}}"/>{{piece.nom}} </p>
+                            <p> <input type="checkbox" checked="checked"  onclick="return false" class="checkbox" name="piece2[]" id="piece2" value="{{piece.genartnr}}"/>{{piece.nom}} </p>
                         </div>
                     </div>
                 {% endif %}
@@ -42,7 +42,7 @@
                 {% if piece.obligatoire == 0 %}
                     <div class="card w-50">
                         <div class="card-body">
-                            <p> <input name="piece[]" value="{{piece.nom}}" id="piece" type="checkbox" checked="checked" class="checkbox"/>{{piece.nom}} </p>
+                            <p> <input name="piece[]" value="{{piece.genartnr}}" id="piece" type="checkbox" checked="checked" class="checkbox"/>{{piece.nom}} </p>
                         </div>
                     </div>
                 {% endif %}

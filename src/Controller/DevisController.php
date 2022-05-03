@@ -6,6 +6,7 @@ use App\Entity\Devis;
 use App\Entity\TypePrestation;
 use App\Form\DevisType;
 use App\Repository\DevisRepository;
+use App\Repository\GarageRepository;
 use App\Repository\TypePrestationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -122,18 +123,50 @@ class DevisController extends AbstractController
         ]);
     }
     #[Route('/new/liste_pieces/final', name: 'final', methods: ['GET', 'POST'])]
-    public function final(): Response
+    public function final(DevisRepository $devisRepository, GarageRepository $garageRepository): Response
     {
+        // recuperer les pices obligatoire et les pices choisi par le user
         $liste_pieces2=$_POST['piece2'];
         $liste_pieces=$_POST['piece'];
+        // recuperer l'id vehicule
         $ktypnr=$_POST['ktypnr'];
-        dump($liste_pieces,$liste_pieces2,$ktypnr);
-        //dump($ktypnr,$liste_pieces);
-        //charger la liste des resultats + renvoyer vers devis 
+
+        // on addition les 2 tableaux
+        $liste_pieces_total=array_merge($liste_pieces, $liste_pieces2);
+        //dump($liste_pieces_total);
+
+        // récuperer le type de produits que veut l'utilisateur
+        $gamme_produit=$this->getUser()->getGammeProduit();
+
+        // recuperer les infos sur la piece
+        $info_piece=$devisRepository->prix_piece($liste_pieces,$ktypnr);
+        $info_piece2=$devisRepository->prix_piece($liste_pieces2,$ktypnr);
+        
+        //recuperer le temps et le taux horaire
+        $temps_piece=$devisRepository->temps_prestation($liste_pieces[0]);
+        $temps_piece2=$devisRepository->temps_prestation($liste_pieces2[0]);
+
+
+        $info_piece_total= array_merge($info_piece, $temps_piece);
+        dump($info_piece_total);
+        //recuperer la liste des garages
+        $liste_garage = $garageRepository->liste_garage();
+        //dump($liste_pieces,$liste_pieces2,$ktypnr,$gamme_produit,$info_piece,$info_piece2,$temps_piece,$temps_piece2,$liste_garage);
+        
+        /* charger la liste des garages et leurs prix * temps de modification + ajouter le prix du produit
+        charger la liste des resultats + renvoyer vers devis 
+        a optimiser recuperer et mettre dans un tableau les différentes pieces
+        */
         
         return $this->render('devis/new/liste_pieces/final.html.twig', [
             'ktypnr' =>$ktypnr ,
-            'listePieces'=>$liste_pieces
+            'listePieces'=>$liste_pieces,
+            'listePieces2'=>$liste_pieces2,
+            'info_piece'=>$info_piece,
+            'info_piece2'=>$info_piece2,
+            'temps_piece'=>$temps_piece,
+            'temps_piece2'=>$temps_piece2,
+            'liste_garage'=>$liste_garage
         ]);
     }
 

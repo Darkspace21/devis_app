@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}devis{% endblock %}
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+    {% for garage in liste_garage %}
+        <div class="card" style="width: 18rem; margin-left:5%; margin-bottom:2%">
+            <img class="card-img-top" src="..." alt="Card image cap">
+            <div class="card-body">
+            <h5 class="card-title">{{ garage.nom_garage }}</h5>
+            {# prix pieces + garage.t1 * temps_piece.temps #}
+            {% if temps_piece.type_taux_horaire == 'T1' %}
+                <p class="card-text">{{ (garage.t1 * temps_piece.temps + info_piece.c_all) + (garage.t1 * temps_piece2.temps + info_piece2.c_all) }} €</p>
+            {% elseif temps_piece.type_taux_horaire == 'T2' %}
+                <p class="card-text">{{ garage.t2 * temps_piece.temps + info_piece.c_all }} €</p>
+            {% else %}
+                <p class="card-text">{{ garage.t3 * temps_piece.temps + info_piece.c_all }} €</p>
+            {% endif %}
+            <a href="#" class="btn btn-primary">Valider</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

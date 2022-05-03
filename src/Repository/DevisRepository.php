@@ -102,6 +102,7 @@ class DevisRepository extends ServiceEntityRepository
             return $stmt->fetch();
     }
 
+    // defini la liste des pieces necessaire en fonction de la presta choisi
     public function pieces_necessaire($presta){
         $conn = $this->getEntityManager()->getConnection();
         $sql = 
@@ -115,6 +116,43 @@ class DevisRepository extends ServiceEntityRepository
         return $stmt->fetchAll();
     }
 
+    // defini le temps pour changer une pieces données
+    public function temps_prestation($id_piece){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT pieces_necessaire.*
+        FROM `pieces_necessaire`
+        where pieces_necessaire.genartnr  =:id_piece
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":id_piece"=>$id_piece));
+        return $stmt->fetch();
+    }
+
+    // prix et information de la liste des pièces choisis
+    public function prix_piece($piece_id,$vehicule_id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT db_devis.t001.marke,
+        db_devis.t400.artnr,
+        db_devis.t030.bez,
+        db_devis.t400.vknzielnr,
+        db_devis.tariffs_sup.c_all 
+        from db_devis.t400
+		inner join db_devis.t001 on db_devis.t400.dlnr = db_devis.t001.dlnr
+        left join db_devis.tariffs_sup on db_devis.tariffs_sup.reference = db_devis.t400.artnr
+        inner join db_devis.t320 on db_devis.t400.genartnr = db_devis.t320.genartnr
+        inner join db_devis.t030 on db_devis.t320.beznr = db_devis.t030.beznr
+        where
+        db_devis.t400.genartnr = :piece_id
+        and db_devis.t400.vknzielnr = :vehicule_id
+        and db_devis.t030.sprachnr = '006'
+        and db_devis.tariffs_sup.c_all <> '0'
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":piece_id"=>$piece_id[0],":vehicule_id"=>$vehicule_id));
+        return $stmt->fetch();
+    }
     
 
     // /**

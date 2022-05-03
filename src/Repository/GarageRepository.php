@@ -45,6 +45,20 @@ class GarageRepository extends ServiceEntityRepository
         }
     }
 
+
+    // prix et information de la liste des pièces choisis
+    public function liste_garage(){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT * 
+        from garage
+        inner join taux_horaire on taux_horaire.id = garage.taux_horaire_id
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array());
+        return $stmt->fetchAll();
+    }
+
     // /**
     //  * @return Garage[] Returns an array of Garage objects
     //  */

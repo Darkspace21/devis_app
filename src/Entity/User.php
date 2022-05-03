@@ -271,25 +271,25 @@ class User implements UserInterface
         return $this->devis;
     }
 
-    public function addDevis(Devis $devis): self
-    {
-        if (!$this->devis->contains($devis)) {
-            $this->devis[] = $devis;
-            $devis->setUser($this);
-        }
+    // public function addDevis(Devis $devis): self
+    // {
+    //     if (!$this->devis->contains($devis)) {
+    //         $this->devis[] = $devis;
+    //         $devis->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeDevis(Devis $devis): self
-    {
-        if ($this->devis->removeElement($devis)) {
-            // set the owning side to null (unless already changed)
-            if ($devis->getUser() === $this) {
-                $devis->setUser(null);
-            }
-        }
+    // public function removeDevis(Devis $devis): self
+    // {
+    //     if ($this->devis->removeElement($devis)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($devis->getUser() === $this) {
+    //             $devis->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }
