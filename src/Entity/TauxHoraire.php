@@ -36,7 +36,7 @@ class TauxHoraire
      * @ORM\ManyToOne(targetEntity=ListeOperation::class, inversedBy="taux_horaire")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $listeOperation;
+    // private $listeOperation;
 
     public function getId(): ?int
     {
@@ -79,15 +79,15 @@ class TauxHoraire
         return $this;
     }
 
-    public function getListeOperation(): ?ListeOperation
-    {
-        return $this->listeOperation;
-    }
+    // public function getListeOperation(): ?ListeOperation
+    // {
+    //     return $this->listeOperation;
+    // }
 
-    public function setListeOperation(?ListeOperation $listeOperation): self
-    {
-        $this->listeOperation = $listeOperation;
+    // public function setListeOperation(?ListeOperation $listeOperation): self
+    // {
+    //     $this->listeOperation = $listeOperation;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

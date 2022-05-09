@@ -141,13 +141,14 @@ class DevisController extends AbstractController
         // recuperer les infos sur la piece
         $info_piece=$devisRepository->prix_piece($liste_pieces,$ktypnr);
         $info_piece2=$devisRepository->prix_piece($liste_pieces2,$ktypnr);
-        
+
         //recuperer le temps et le taux horaire
         $temps_piece=$devisRepository->temps_prestation($liste_pieces[0]);
         $temps_piece2=$devisRepository->temps_prestation($liste_pieces2[0]);
 
 
         $info_piece_total= array_merge($info_piece, $temps_piece);
+        $info_piece_total2= array_merge($info_piece2, $temps_piece2);
         dump($info_piece_total);
         //recuperer la liste des garages
         $liste_garage = $garageRepository->liste_garage();
@@ -160,13 +161,10 @@ class DevisController extends AbstractController
         
         return $this->render('devis/new/liste_pieces/final.html.twig', [
             'ktypnr' =>$ktypnr ,
-            'listePieces'=>$liste_pieces,
-            'listePieces2'=>$liste_pieces2,
-            'info_piece'=>$info_piece,
-            'info_piece2'=>$info_piece2,
-            'temps_piece'=>$temps_piece,
-            'temps_piece2'=>$temps_piece2,
-            'liste_garage'=>$liste_garage
+            'liste_pieces_total'=>$liste_pieces_total,
+            'liste_garage'=>$liste_garage,
+            'info_piece_total'=>$info_piece_total,
+            'info_piece_total2'=>$info_piece_total2
         ]);
     }
 

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TauxHoraire{% endblock %}
+
+{% block body %}
+    <h1>Create new TauxHoraire</h1>
+
+    {{ include('taux_horaire/_form.html.twig') }}
+
+    <a href="{{ path('taux_horaire_index') }}">back to list</a>
+{% endblock %}

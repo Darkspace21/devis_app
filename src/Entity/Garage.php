@@ -30,19 +30,21 @@ class Garage
     private $emplacement;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $RDV;
-
-    /**
      * @ORM\OneToOne(targetEntity=TauxHoraire::class, cascade={"persist", "remove"})
      */
-    private $taux_horaire;
+    private $TauxHoraire;
+
 
     /**
      * @ORM\OneToMany(targetEntity=Forfait::class, mappedBy="garage")
      */
     private $forfait;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="garages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function __construct()
     {
@@ -92,12 +94,12 @@ class Garage
 
     public function getTauxHoraire(): ?tauxHoraire
     {
-        return $this->taux_horaire;
+        return $this->TauxHoraire;
     }
 
-    public function setTauxHoraire(?tauxHoraire $taux_horaire): self
+    public function setTauxHoraire(?tauxHoraire $TauxHoraire): self
     {
-        $this->taux_horaire = $taux_horaire;
+        $this->TauxHoraire = $TauxHoraire;
 
         return $this;
     }
@@ -128,6 +130,18 @@ class Garage
                 $forfait->setGarage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

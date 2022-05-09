@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Garage index{% endblock %}
+
+{% block body %}
+    <h1>Garage index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom garage</th>
+                <th>Emplacement</th>
+                <th>T1</th>
+                <th>T2</th>
+                <th>T3</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for garage in garages %}
+            <tr>
+                <td>{{ garage.id }}</td>
+                <td>{{ garage.nom_garage }}</td>
+                <td>{{ garage.emplacement }}</td>
+                <td>{{ garage.t1}}</td>
+                <td>{{ garage.t2}}</td>
+                <td>{{ garage.t3}}</td>
+                <td>
+                    <a href="{{ path('garage_show', {'id': garage.id}) }}">show</a>
+                    <a href="{{ path('garage_edit', {'id': garage.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('garage_new') }}">Create new</a>
+{% endblock %}

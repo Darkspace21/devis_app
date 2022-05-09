@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit TauxHoraire{% endblock %}
+
+{% block body %}
+    <h1>Edit TauxHoraire</h1>
+
+    {{ include('taux_horaire/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('taux_horaire_index') }}">back to list</a>
+
+    {{ include('taux_horaire/_delete_form.html.twig') }}
+{% endblock %}

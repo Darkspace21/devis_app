@@ -46,7 +46,7 @@ class GarageRepository extends ServiceEntityRepository
     }
 
 
-    // prix et information de la liste des pièces choisis
+    // prix et information de tous les garages pour le devis
     public function liste_garage(){
         $conn = $this->getEntityManager()->getConnection();
         $sql = 
@@ -57,6 +57,32 @@ class GarageRepository extends ServiceEntityRepository
         $stmt = $conn->prepare($sql);
         $stmt->execute(array());
         return $stmt->fetchAll();
+    }
+
+    // prix et information de tous les garages d'un utilisateur
+    public function liste_garage_user($user_id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT * 
+        from garage
+        inner join taux_horaire on taux_horaire.id = garage.taux_horaire_id
+        where id_user=:user_id
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id));
+        return $stmt->fetchAll();
+    }
+
+    // ajouter un garage pour un user 
+    public function ajout_garage($taux_horaire_id,$nom_garage,$emplacement,$id_user ){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "
+        INSERT INTO garage (taux_horaire_id, nom_garage, emplacement, id_user)
+        VALUES (:taux_horaire_id , :nom_garage , :emplacement, :id_user)
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":taux_horaire_id"=>$taux_horaire_id,":nom_garage"=>$nom_garage,"emplacement"=>$emplacement,"id_user"=>$id_user));
     }
 
     // /**

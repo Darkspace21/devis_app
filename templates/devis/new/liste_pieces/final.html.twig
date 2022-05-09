@@ -6,19 +6,27 @@
 {% block body %}
     {{ parent() }}
     {% for garage in liste_garage %}
-        <div class="card" style="width: 18rem; margin-left:5%; margin-bottom:2%">
-            <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card" style="width: 20rem; margin-left:5%; margin-bottom:2%">
+            <img class="card-img-top" src="../../../../public/logo.png">
             <div class="card-body">
-            <h5 class="card-title">{{ garage.nom_garage }}</h5>
-            {# prix pieces + garage.t1 * temps_piece.temps #}
-            {% if temps_piece.type_taux_horaire == 'T1' %}
-                <p class="card-text">{{ (garage.t1 * temps_piece.temps + info_piece.c_all) + (garage.t1 * temps_piece2.temps + info_piece2.c_all) }} €</p>
-            {% elseif temps_piece.type_taux_horaire == 'T2' %}
-                <p class="card-text">{{ garage.t2 * temps_piece.temps + info_piece.c_all }} €</p>
-            {% else %}
-                <p class="card-text">{{ garage.t3 * temps_piece.temps + info_piece.c_all }} €</p>
-            {% endif %}
-            <a href="#" class="btn btn-primary">Valider</a>
+                <h5 class="card-title">{{ garage.nom_garage }}</h5>
+                {# prix pieces + garage.t1 * temps_piece.temps #}
+                {% if info_piece_total.type_taux_horaire == 'T1' %}
+                    <h6 class="card-text">{{ (garage.t1 * info_piece_total.temps + info_piece_total.c_all) + (garage.t1 * info_piece_total2.temps + info_piece_total2.c_all) }} €</h6>
+                    <div>
+                        <input type="checkbox" id="scales" name="scales" checked>
+                        <label for="scales">{{info_piece_total.bez}} / {{info_piece_total.marke}} / {{info_piece_total.c_all}} €</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="scales2" name="scales2" checked>
+                        <label for="scales2">{{info_piece_total2.bez}} / {{info_piece_total2.marke}} / {{info_piece_total2.c_all}} €</label>
+                    </div>
+                {% elseif info_piece_total.type_taux_horaire == 'T2' %}
+                    <p class="card-text">{{ garage.t2 * info_piece_total.temps + info_piece_total.c_all }} €</p>
+                {% else %}
+                    <p class="card-text">{{ garage.t3 * info_piece_total.temps + info_piece_total.c_all }} €</p>
+                {% endif %}
+                <a href="#" class="btn btn-primary">Valider</a>
             </div>
         </div>
     {% endfor %}
