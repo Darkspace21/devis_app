@@ -16,7 +16,6 @@ class GarageType extends AbstractType
         $builder
             ->add('nom_garage')
             ->add('emplacement')
-            ->add('RDV')
             
            
             /*->add('t1',TextType::class)

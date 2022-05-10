@@ -3,6 +3,7 @@
 {% block title %}Garage index{% endblock %}
 
 {% block body %}
+{{ parent() }}
     <h1>Garage index</h1>
 
     <table class="table">
@@ -23,21 +24,21 @@
                 <td>{{ garage.id }}</td>
                 <td>{{ garage.nom_garage }}</td>
                 <td>{{ garage.emplacement }}</td>
-                <td>{{ garage.t1}}</td>
-                <td>{{ garage.t2}}</td>
-                <td>{{ garage.t3}}</td>
+                <td>{{ garage.t1}} €</td>
+                <td>{{ garage.t2}} €</td>
+                <td>{{ garage.t3}} €</td>
                 <td>
-                    <a href="{{ path('garage_show', {'id': garage.id}) }}">show</a>
-                    <a href="{{ path('garage_edit', {'id': garage.id}) }}">edit</a>
+                    <a href="{{ path('garage_show', {'id': garage.id}) }}">afficher</a>
+                    <a href="{{ path('garage_edit', {'id': garage.id}) }}">modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">Vous n'avez pas de garage</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('garage_new') }}">Create new</a>
+    <a href="{{ path('garage_new') }}">Ajouter un garage</a>
 {% endblock %}
