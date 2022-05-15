@@ -150,7 +150,7 @@ class DevisRepository extends ServiceEntityRepository
         and db_devis.tariffs_sup.c_all <> '0'
         ";
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array(":piece_id"=>$piece_id[0],":vehicule_id"=>$vehicule_id));
+        $stmt->execute(array(":piece_id"=>$piece_id,":vehicule_id"=>$vehicule_id));
         return $stmt->fetch();
     }
     

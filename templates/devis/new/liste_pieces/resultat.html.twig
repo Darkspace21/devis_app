@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}devis{% endblock %}
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+    {% for garage in liste_garage %}
+    <form  action="final" class="input-group" method="POST">
+        <div class="card" style="width: 30rem; margin-left:5%; margin-bottom:2%">
+            <img class="card-img-top" src="../../../../public/logo.png">
+            <div class="card-body">
+                <h5 class="card-title">{{ garage.nom_garage }}</h5>
+                {% set count = 0 %}
+                {% set prix_total = 0 %}
+                {% for info_piece_total in liste_pieces_info_final %}
+                    {% if info_piece_total.type_taux_horaire == 'T1' %}
+                        <div>
+                            <input type="checkbox"  checked onclick="return false" name="piece[]" id="piece">
+                            <label for="piece">{{info_piece_total.bez}} / {{info_piece_total.marke}} / {{info_piece_total.c_all}} €</label>
+                            {% set count = count + garage.t1 * info_piece_total.temps %}
+                            {% set prix_total = prix_total + (garage.t1 * info_piece_total.temps + info_piece_total.c_all) %}
+                        </div>
+                    {% endif %}    
+                {% endfor %}
+                <div>
+                    <input type="checkbox" checked onclick="return false" name="prix_main_oeuvre" id="prix_main_oeuvre">
+                    <label for="prix_main_oeuvre">main d'oeuvre: {{count}} €</label>
+                </div>
+                <h5> prix TTC: {{ prix_total }} €</h5>
+                <button  id="valider" type="submit" class="btn btn-primary">Valider</button>
+            </div>
+        </div>
+    </form>
+    {% endfor %}
+{% endblock %}

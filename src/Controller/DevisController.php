@@ -122,35 +122,50 @@ class DevisController extends AbstractController
             'listePieces'=>$liste_pieces
         ]);
     }
-    #[Route('/new/liste_pieces/final', name: 'final', methods: ['GET', 'POST'])]
-    public function final(DevisRepository $devisRepository, GarageRepository $garageRepository): Response
+    #[Route('/new/liste_pieces/resultat', name: 'resultat', methods: ['GET', 'POST'])]
+    public function resultat(DevisRepository $devisRepository, GarageRepository $garageRepository): Response
     {
         // recuperer les pices obligatoire et les pices choisi par le user
-        $liste_pieces2=$_POST['piece2'];
+        $liste_pieces2='';
+        if (isset($_POST['piece2'])){
+            $liste_pieces2=$_POST['piece2'];
+        }
         $liste_pieces=$_POST['piece'];
         // recuperer l'id vehicule
         $ktypnr=$_POST['ktypnr'];
 
-        // on addition les 2 tableaux
-        $liste_pieces_total=array_merge($liste_pieces, $liste_pieces2);
-        //dump($liste_pieces_total);
+        // on cumul les 2 tableaux
+        if (sizeof($liste_pieces) != '' && sizeof($liste_pieces2)!=''){
+            $liste_pieces_total=array_merge($liste_pieces, $liste_pieces2);
+        }else{
+            $liste_pieces_total = $liste_pieces;
+        }
 
         // récuperer le type de produits que veut l'utilisateur
         $gamme_produit=$this->getUser()->getGammeProduit();
+        $info_piece_total=[];
+        //dump($liste_pieces_total);
+        $liste_pieces_info_final='';
+        for($i = 0; $i <= sizeof($liste_pieces_total)-1; $i++){
+            // recuperer les infos sur la piece
+            //dump($i);
+            $info_piece=$devisRepository->prix_piece($liste_pieces_total[$i],$ktypnr);
 
-        // recuperer les infos sur la piece
-        $info_piece=$devisRepository->prix_piece($liste_pieces,$ktypnr);
-        $info_piece2=$devisRepository->prix_piece($liste_pieces2,$ktypnr);
-
-        //recuperer le temps et le taux horaire
-        $temps_piece=$devisRepository->temps_prestation($liste_pieces[0]);
-        $temps_piece2=$devisRepository->temps_prestation($liste_pieces2[0]);
-
-
-        $info_piece_total= array_merge($info_piece, $temps_piece);
-        $info_piece_total2= array_merge($info_piece2, $temps_piece2);
-        dump($info_piece_total);
-        //recuperer la liste des garages
+             //recuperer le temps et le taux horaire
+            $temps_piece=$devisRepository->temps_prestation($liste_pieces_total[$i]);
+            
+            $info_piece_total= array_merge($info_piece, $temps_piece);
+            //dump($info_piece_total);
+            $test=json_encode($info_piece_total);
+            if ($liste_pieces_info_final =='' ){
+                $liste_pieces_info_final = $test;
+            }else{
+                $liste_pieces_info_final= $liste_pieces_info_final .','.$test ;
+            }
+        }
+        $liste_pieces_info_final= json_decode('['.$liste_pieces_info_final.']');
+        //dump($liste_pieces_info_final);
+        //recuperer la liste des garages avec le taux_horaire
         $liste_garage = $garageRepository->liste_garage();
         //dump($liste_pieces,$liste_pieces2,$ktypnr,$gamme_produit,$info_piece,$info_piece2,$temps_piece,$temps_piece2,$liste_garage);
         
@@ -159,12 +174,10 @@ class DevisController extends AbstractController
         a optimiser recuperer et mettre dans un tableau les différentes pieces
         */
         
-        return $this->render('devis/new/liste_pieces/final.html.twig', [
+        return $this->render('devis/new/liste_pieces/resultat.html.twig', [
             'ktypnr' =>$ktypnr ,
-            'liste_pieces_total'=>$liste_pieces_total,
             'liste_garage'=>$liste_garage,
-            'info_piece_total'=>$info_piece_total,
-            'info_piece_total2'=>$info_piece_total2
+            'liste_pieces_info_final'=>$liste_pieces_info_final
         ]);
     }
 
