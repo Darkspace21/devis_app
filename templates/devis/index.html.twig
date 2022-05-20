@@ -3,23 +3,28 @@
 {% block title %}Devis index{% endblock %}
 
 {% block body %}
+    {% if message is defined %}
+        {{message}}
+    {% endif %}
+    {{ parent() }}
     <h1>Devis index</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Type de prestation</th>
+                <th>Nom garage</th>
                 <th>Prix</th>
-                <th>Nb_heure_total</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
+           
         {% for devi in devis %}
             <tr>
-                <td>{{ devi.id }}</td>
+                <td>{{ devi.nom_prestation }}</td>
+                <td>{{ devi.nom_garage }}</td>
                 <td>{{ devi.prix }}</td>
-                <td>{{ devi.nbHeureTotal }}</td>
                 <td>
                     <a href="{{ path('devis_show', {'id': devi.id}) }}">show</a>
                     <a href="{{ path('devis_edit', {'id': devi.id}) }}">edit</a>

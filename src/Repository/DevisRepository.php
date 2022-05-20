@@ -45,6 +45,21 @@ class DevisRepository extends ServiceEntityRepository
         }
     }
 
+    public function liste_devis($user_id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+        Select devis.id, type_prestation.nom_prestation, garage.nom_garage, devis.prix 
+        from db_devis.devis
+        inner join garage on garage.id= devis.garage_id
+        inner join type_prestation on type_prestation.id =devis.type_prestation_id 
+        where devis.user_id = :user_id
+        ";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(":user_id"=>$user_id));
+            return $stmt->fetchAll();
+    }
+
+
     public function listeMarque(){
         $conn = $this->getEntityManager()->getConnection();
         $sql = "
@@ -153,7 +168,41 @@ class DevisRepository extends ServiceEntityRepository
         $stmt->execute(array(":piece_id"=>$piece_id,":vehicule_id"=>$vehicule_id));
         return $stmt->fetch();
     }
+
+    public function creer_devis($user_id,$type_prestation_id,$prix_total,$garage_id,$prix_main_oeuvre ){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "
+        INSERT INTO devis (user_id, type_prestation_id, prix, garage_id, main_oeuvre)
+        VALUES (:user_id , :type_prestation_id , :prix_total, :garage_id, :prix_main_oeuvre)
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array("user_id"=>$user_id,":garage_id"=>$garage_id,":type_prestation_id"=>$type_prestation_id,"prix_total"=>$prix_total,":prix_main_oeuvre"=>$prix_main_oeuvre));
+    }
+
+    // defini le temps pour changer une pieces données
+    public function max_id_devis($user_id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT MAX(id) as id
+        FROM `devis`
+        where devis.user_id  = :user_id
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":user_id"=>$user_id));
+        return $stmt->fetch();
+    }
     
+    public function devis_pieces_choisi($genartnr, $temps, $nom, $marque, $prix, $devis_id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "
+        INSERT INTO pieces_choisi (genartnr, temps, nom, marque, prix, devis_id )
+        VALUES (:genartnr , :temps , :nom, :marque, :prix,:devis_id )
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array("genartnr"=>$genartnr,":temps"=>$temps,":nom"=>$nom,"marque"=>$marque,":prix"=>$prix,":devis_id"=>$devis_id));
+    }
 
     // /**
     //  * @return Devis[] Returns an array of Devis objects

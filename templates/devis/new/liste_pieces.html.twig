@@ -18,7 +18,8 @@
         float: right;
     }
 </style>
-<form  action="resultat" class="input-group" method="POST">
+<form  action="resultat" class="input-group" method="GET">
+    <input  type="hidden" name="presta" id="presta" value= "{{ presta }}"/>
     <div class="marge">
         <h1>Selectionner le ou les Types de produits</h1>
         {% if ktypnr is defined %}

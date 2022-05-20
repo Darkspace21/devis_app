@@ -45,6 +45,18 @@ class TypePrestationRepository extends ServiceEntityRepository
         }
     }
 
+    public function type_presta_id($presta){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT id 
+        from type_prestation
+        where type_prestation.nom_prestation =:presta
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":presta"=>$presta));
+        return $stmt->fetch();
+    }
+
     // /**
     //  * @return TypePrestation[] Returns an array of TypePrestation objects
     //  */

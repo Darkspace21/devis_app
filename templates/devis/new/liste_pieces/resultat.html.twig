@@ -6,29 +6,45 @@
 {% block body %}
     {{ parent() }}
     {% for garage in liste_garage %}
-    <form  action="final" class="input-group" method="POST">
+    <form  action="resultat/final" class="input-group" method="POST">
         <div class="card" style="width: 30rem; margin-left:5%; margin-bottom:2%">
-            <img class="card-img-top" src="../../../../public/logo.png">
+            {# <img class="card-img-top" src="../../../../public/logo.png"> #}
             <div class="card-body">
-                <h5 class="card-title">{{ garage.nom_garage }}</h5>
+                <h4> 
+                    <div>
+                        <input type="hidden" name="garage" id="garage" value="{{garage.id}}"/>
+                        <label>{{garage.nom_garage}} </label>
+                    </div>
+                    
+                </h4> 
+                <div>
+                    <input type="hidden" name="presta" id="presta" value="{{presta}}"/>
+                </div>
+                {# <input type="checkbox" checked="checked"  onclick="return false" class="checkbox" name="piece2[]" id="piece2" value="{{piece.genartnr}}"/>{{piece.nom}} #}
                 {% set count = 0 %}
                 {% set prix_total = 0 %}
                 {% for info_piece_total in liste_pieces_info_final %}
                     {% if info_piece_total.type_taux_horaire == 'T1' %}
                         <div>
-                            <input type="checkbox"  checked onclick="return false" name="piece[]" id="piece">
-                            <label for="piece">{{info_piece_total.bez}} / {{info_piece_total.marke}} / {{info_piece_total.c_all}} €</label>
-                            {% set count = count + garage.t1 * info_piece_total.temps %}
-                            {% set prix_total = prix_total + (garage.t1 * info_piece_total.temps + info_piece_total.c_all) %}
+                            <input type="checkbox"  checked onclick="return false" name="piece[]" id="piece" value="{{info_piece_total.genartnr}} / {{info_piece_total.temps}} / {{info_piece_total.bez}} / {{info_piece_total.marke}} / {{info_piece_total.c_all}}"/>
+                            <label for="piece"  >{{info_piece_total.bez}} / {{info_piece_total.marke}} / {{info_piece_total.c_all}} €</label>
                         </div>
+                        {% set count = count + garage.t1 * info_piece_total.temps %}
+                        {% set prix_total = prix_total + (garage.t1 * info_piece_total.temps + info_piece_total.c_all) %}
                     {% endif %}    
                 {% endfor %}
                 <div>
-                    <input type="checkbox" checked onclick="return false" name="prix_main_oeuvre" id="prix_main_oeuvre">
-                    <label for="prix_main_oeuvre">main d'oeuvre: {{count}} €</label>
+                    <input type="checkbox" checked onclick="return false" name="prix_main_oeuvre" id="prix_main_oeuvre" value="{{count}}"/>
+                    <label for="prix_main_oeuvre" >main d'oeuvre: {{count}} €</label>
+                    
                 </div>
-                <h5> prix TTC: {{ prix_total }} €</h5>
-                <button  id="valider" type="submit" class="btn btn-primary">Valider</button>
+                <h5>
+                    <div>
+                        <input  type="hidden" name="prix_total" id="prix_total" value= "{{ prix_total }}"/>
+                        <label> prix TTC: {{ prix_total }} € </label>
+                    </div>
+                </h5>
+                <input   type="submit" value="Valider" class="btn btn-primary">
             </div>
         </div>
     </form>

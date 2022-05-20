@@ -24,8 +24,11 @@ class DevisController extends AbstractController
     #[Route('/', name: 'devis_index', methods: ['GET'])]
     public function index(DevisRepository $devisRepository): Response
     {
+        $user_id=$this->getUser()->getId();
+        $devis=$devisRepository->liste_devis($user_id);
+        //dump($devis);
         return $this->render('devis/index.html.twig', [
-            'devis' => $devisRepository->findAll(),
+            'devis' =>$devis ,
         ]);
     }
 
@@ -89,10 +92,10 @@ class DevisController extends AbstractController
                 $version= $marqueModeleVersion[2];
                 //dump($marque,$modele,$version,$presta);
                 $ktpynr=$devisRepository->ktypnr($marque,$modele,$version);
-                dump($ktpynr);
+                //dump($ktpynr);
                 $liste_pieces=$devisRepository->pieces_necessaire($presta);
-                dump($liste_pieces);
-                return $this->redirectToRoute('devis_new_liste_pieces', array('ktpynr' => $ktpynr,'liste_pieces'=>$liste_pieces));
+                //dump($liste_pieces);
+                return $this->redirectToRoute('devis_new_liste_pieces', array('ktpynr' => $ktpynr,'liste_pieces'=>$liste_pieces,'presta'=>$presta));
             }
             //afficher la liste des offres pour le véhicule et le type de presta
             // envoyer le type de presta puis toutes les infos de la voiture afin de retourner les différent garage et les différents prix des garages
@@ -115,11 +118,11 @@ class DevisController extends AbstractController
     {
         $ktypnr=$_GET['ktpynr'];
         $liste_pieces=$_GET['liste_pieces'];
-        //dump($ktypnr,$liste_pieces);
-        
+        $presta=$_GET['presta'];
         return $this->render('devis/new/liste_pieces.html.twig', [
             'ktypnr' =>$ktypnr ,
-            'listePieces'=>$liste_pieces
+            'listePieces'=>$liste_pieces,
+            'presta'=>$presta
         ]);
     }
     #[Route('/new/liste_pieces/resultat', name: 'resultat', methods: ['GET', 'POST'])]
@@ -127,13 +130,14 @@ class DevisController extends AbstractController
     {
         // recuperer les pices obligatoire et les pices choisi par le user
         $liste_pieces2='';
-        if (isset($_POST['piece2'])){
-            $liste_pieces2=$_POST['piece2'];
+        if (isset($_GET['piece2'])){
+            $liste_pieces2=$_GET['piece2'];
         }
-        $liste_pieces=$_POST['piece'];
+        $liste_pieces=$_GET['piece'];
         // recuperer l'id vehicule
-        $ktypnr=$_POST['ktypnr'];
-
+        $ktypnr=$_GET['ktypnr'];
+        $presta=$_GET['presta'];
+        // dump($presta);
         // on cumul les 2 tableaux
         if (sizeof($liste_pieces) != '' && sizeof($liste_pieces2)!=''){
             $liste_pieces_total=array_merge($liste_pieces, $liste_pieces2);
@@ -177,8 +181,38 @@ class DevisController extends AbstractController
         return $this->render('devis/new/liste_pieces/resultat.html.twig', [
             'ktypnr' =>$ktypnr ,
             'liste_garage'=>$liste_garage,
-            'liste_pieces_info_final'=>$liste_pieces_info_final
+            'liste_pieces_info_final'=>$liste_pieces_info_final,
+            'presta'=>$presta
         ]);
+    }
+
+    #[Route('/new/liste_pieces/resultat/final', name: 'final', methods: ['GET', 'POST'])]
+    public function creer_devis(DevisRepository $devisRepository, GarageRepository $garageRepository, TypePrestationRepository $typePrestationRepository): Response
+    {
+        // on récupere toutes les datas
+        $garage_id=$_POST["garage"];
+        $pieces=$_POST["piece"];
+        $prix_main_oeuvre=$_POST['prix_main_oeuvre'];
+        $prix_total=$_POST['prix_total'];
+        $presta=$_POST['presta'];
+        $presta_id= $typePrestationRepository->type_presta_id($presta);
+        $user_id=$this->getUser()->getId();
+        
+        // on créer le devis
+        $devisRepository->creer_devis($user_id,$presta_id['id'],$prix_total,$garage_id,$prix_main_oeuvre);
+        
+        //on recupere l'id du devis
+        $devis_id=$devisRepository->max_id_devis($user_id);
+        //on ajoute les pieces selectionnées dans pieces_choisi afin d'être sur que le prix est figé
+        foreach($pieces as $piece){
+            list($genartnr, $temps, $nom, $marque, $prix) = explode(" / ", $piece);
+            
+            $devisRepository->devis_pieces_choisi($genartnr, $temps, $nom, $marque, $prix, $devis_id['id']);
+        // message d'ajout d'un devis 
+        }
+        $message="votre devis ".$devis_id['id']. " a bien été créé";
+        return $this->redirectToRoute("devis_index",array('message'=>$message));
+        
     }
 
     #[Route('/{id}', name: 'devis_show', methods: ['GET'])]

@@ -53,6 +53,7 @@ class GarageRepository extends ServiceEntityRepository
         "SELECT * 
         from garage
         inner join taux_horaire on taux_horaire.id = garage.taux_horaire_id
+        order by t1 asc,t2 asc,t3 asc
         ";
         $stmt = $conn->prepare($sql);
         $stmt->execute(array());

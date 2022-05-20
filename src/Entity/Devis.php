@@ -23,11 +23,6 @@ class Devis
     private $prix;
 
     /**
-     * @ORM\Column(type="float")
-     */
-    private $nb_heure_total;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $userId;
@@ -38,6 +33,15 @@ class Devis
      */
     private $typePrestation;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $garage_id;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $main_oeuvre;
 
     public function getId(): ?int
     {
