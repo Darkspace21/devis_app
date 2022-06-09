@@ -173,8 +173,8 @@ class DevisRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $sql = 
         "
-        INSERT INTO devis (user_id, type_prestation_id, prix, garage_id, main_oeuvre)
-        VALUES (:user_id , :type_prestation_id , :prix_total, :garage_id, :prix_main_oeuvre)
+        INSERT INTO devis (user_id, type_prestation_id, prix, garage_id, main_oeuvre, date_creation)
+        VALUES (:user_id , :type_prestation_id , :prix_total, :garage_id, :prix_main_oeuvre, NOW())
         ";
         $stmt = $conn->prepare($sql);
         $stmt->execute(array("user_id"=>$user_id,":garage_id"=>$garage_id,":type_prestation_id"=>$type_prestation_id,"prix_total"=>$prix_total,":prix_main_oeuvre"=>$prix_main_oeuvre));

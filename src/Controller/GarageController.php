@@ -22,8 +22,9 @@ class GarageController extends AbstractController
     public function index(GarageRepository $garageRepository): Response
     {
         $id_user=$this->getUser()->getId();
+        $garage=$garageRepository->liste_garage_user($id_user);
         return $this->render('garage/index.html.twig', [
-            'garages' => $garageRepository->liste_garage_user($id_user),
+            'garages' => $garage,
         ]);
     }
 
@@ -72,8 +73,12 @@ class GarageController extends AbstractController
     }
 
     #[Route('/{id}', name: 'garage_show', methods: ['GET'])]
-    public function show(Garage $garage): Response
+    public function show(GarageRepository $garageRepository, $id): Response
     {
+        $id_user=$this->getUser()->getId();
+        $garage_id=$id;
+        $garage=$garageRepository->info_garage_user($id_user,$garage_id);
+        //dump($garage);
         return $this->render('garage/show.html.twig', [
             'garage' => $garage,
         ]);

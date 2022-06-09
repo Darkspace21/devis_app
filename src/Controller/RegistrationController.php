@@ -27,7 +27,7 @@ class RegistrationController extends AbstractController
                              GuardAuthenticatorHandler $guardHandler,
                              LoginFormAuthenticator $authenticator): Response
     {
-        dump($this->getUser());
+        //dump($this->getUser());
         if($this->getUser()== null){
 
         

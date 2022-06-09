@@ -30,6 +30,7 @@
                 <td>
                     <a href="{{ path('garage_show', {'id': garage.id}) }}">afficher</a>
                     <a href="{{ path('garage_edit', {'id': garage.id}) }}">modifier</a>
+                    <a href="{{ path('garage_delete', {'id': garage.id}) }}">supprimer</a>
                 </td>
             </tr>
         {% else %}

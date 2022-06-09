@@ -1,9 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
-
+{% block head %}
+    {{ parent() }}
+    <style>
+        .espacement{
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+    </style>
+{% endblock %}
 {% block body %}
-
+<div class="espacement">
+    {{ parent() }}
     <form method="post" style="margin-top: 50px">
 
         {% if error %}
@@ -39,4 +48,5 @@
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+</div>
 {% endblock %}
