@@ -1,8 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Devis index{% endblock %}
-
+{% block head %}
+{{ parent() }}
+<style>
+    .espacement{
+        margin-left: 5%;
+    }
+</style>
+{% endblock %}
 {% block body %}
+    <div class="espacement">
     {% if message is defined %}
         {{message}}
     {% endif %}
@@ -26,8 +34,9 @@
                 <td>{{ devi.nom_garage }}</td>
                 <td>{{ devi.prix }}</td>
                 <td>
-                    <a href="{{ path('devis_show', {'id': devi.id}) }}">show</a>
-                    <a href="{{ path('devis_edit', {'id': devi.id}) }}">edit</a>
+                    <a href="{{ path('devis_show', {'id': devi.id}) }}">afficher</a>
+                    <a href="{{ path('devis_edit', {'id': devi.id}) }}">modifier</a>
+                    <a href="{{ path('devis_delete', {'id': devi.id}) }}">supprimer</a>
                 </td>
             </tr>
         {% else %}
@@ -48,5 +57,6 @@
         </div>
     </div> #}
 
-    <a href="{{ path('devis_new') }}">Create new</a>
+    <a href="{{ path('devis_new') }}">Créer un Devis</a>
+</div>
 {% endblock %}

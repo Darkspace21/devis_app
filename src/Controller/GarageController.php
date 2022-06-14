@@ -85,11 +85,18 @@ class GarageController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'garage_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Garage $garage): Response
+    public function edit(Request $request, GarageRepository $garageRepository, $id): Response
     {
-        $form = $this->createForm(GarageType::class, $garage);
+        $garage = new Garage();
+        $defaultData = ['message' => 'Type your message here'];
+        $form = $this->createFormBuilder($defaultData)
+            ->add('nom_garage', TextType::class)
+            ->add('Emplacement', TextType::class)
+            ->add('T1', TextType::class)
+            ->add('T2', TextType::class)
+            ->add('T3', TextType::class)
+            ->getForm();
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 

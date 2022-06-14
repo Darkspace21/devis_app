@@ -1,15 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Garage index{% endblock %}
-
+{% block head %}
+{{ parent() }}
+<style>
+    .espacement{
+        margin-left: 5%;
+    }
+</style>
+{% endblock %}
 {% block body %}
 {{ parent() }}
+    <div class="espacement">
     <h1>Garage index</h1>
-
+    
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                {# <th>Id</th> #}
                 <th>Nom garage</th>
                 <th>Emplacement</th>
                 <th>T1</th>
@@ -21,7 +29,7 @@
         <tbody>
         {% for garage in garages %}
             <tr>
-                <td>{{ garage.id }}</td>
+                {# <td>{{ garage.id }}</td> #}
                 <td>{{ garage.nom_garage }}</td>
                 <td>{{ garage.emplacement }}</td>
                 <td>{{ garage.t1}} €</td>
@@ -42,4 +50,5 @@
     </table>
 
     <a href="{{ path('garage_new') }}">Ajouter un garage</a>
+    </div>
 {% endblock %}

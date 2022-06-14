@@ -21,32 +21,32 @@
 
         {% if app.user %}
             <div class="mb-3">
-                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Deconnexion</a>
             </div>
         {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in or <a href="{{ path('app_register') }}">register</a></h1>
+        <h1 class="h3 mb-3 font-weight-normal">Se connecter ou <a href="{{ path('app_register') }}">S'enregistrer</a></h1>
         <div class="mb-3">
-            <label for="inputEmail" class="form-label">Email address</label>
+            <label for="inputEmail" class="form-label">Adresse email</label>
             <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            <div id="emailHelp" class="form-text">nous ne partagerons jamais votre adresse email.</div>
         </div>
         <div class="mb-3">
-            <label for="inputPassword" class="form-label">Password</label>
+            <label for="inputPassword" class="form-label">mot de passe</label>
             <input type="password" name="password" id="inputPassword" class="form-control" required>
             <div class="mb-3">
-                <a href="{{ path('app_forgot_password_request') }}">Forgot password?</a>
+                <a href="{{ path('app_forgot_password_request') }}">mot de passe oublié ?</a>
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         </div>
 
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" name="_remember_me"> Remember me
+                <input type="checkbox" name="_remember_me"> se rappeler de moi
             </label>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">se connecter</button>
     </form>
 </div>
 {% endblock %}

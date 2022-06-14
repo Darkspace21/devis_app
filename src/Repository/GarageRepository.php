@@ -100,6 +100,18 @@ class GarageRepository extends ServiceEntityRepository
         $stmt->execute(array(":taux_horaire_id"=>$taux_horaire_id,":nom_garage"=>$nom_garage,"emplacement"=>$emplacement,"id_user"=>$id_user));
     }
 
+        // mise à jour d'un garage pour un user 
+        public function modifier_garage($taux_horaire_id,$nom_garage,$emplacement,$id_user ){
+            $conn = $this->getEntityManager()->getConnection();
+            $sql = 
+            "
+            update garage (taux_horaire_id, nom_garage, emplacement, id_user)
+            VALUES (:taux_horaire_id , :nom_garage , :emplacement, :id_user)
+            ";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(":taux_horaire_id"=>$taux_horaire_id,":nom_garage"=>$nom_garage,"emplacement"=>$emplacement,"id_user"=>$id_user));
+        }
+
     // /**
     //  * @return Garage[] Returns an array of Garage objects
     //  */

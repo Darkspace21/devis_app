@@ -195,6 +195,10 @@ class DevisController extends AbstractController
         $prix_main_oeuvre=$_POST['prix_main_oeuvre'];
         $prix_total=$_POST['prix_total'];
         $presta=$_POST['presta'];
+        $date=$_POST['date'];
+        $time=$_POST['time'];
+        $dateRDV = date('Y-m-d H:i:s', strtotime("$date $time"));
+        dump($dateRDV);
         $presta_id= $typePrestationRepository->type_presta_id($presta);
         $user_id=$this->getUser()->getId();
         
