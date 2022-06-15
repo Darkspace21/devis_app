@@ -46,7 +46,7 @@ class GarageController extends AbstractController
             // mettre à jour garage. 
             $id_user=$this->getUser()->getId();
             $infoGarage=$form->getData();
-            dump($infoGarage);
+            //dump($infoGarage);
 
             $nom_garage=$infoGarage['nom_garage'];
             $emplacement=$infoGarage['Emplacement'];
@@ -59,8 +59,8 @@ class GarageController extends AbstractController
             //recuperer l'id max qui correspond aux valeurs choisis
             //$TauxHoraire->ajout_taux_horaire($T1,$T2,$T3);
             $taux_horaire_id=$TauxHoraire->maxId($T1,$T2,$T3);
-            dump($taux_horaire_id);
-            dump($nom_garage,$emplacement,$id_user);
+            //dump($taux_horaire_id);
+            //dump($nom_garage,$emplacement,$id_user);
             $Garage->ajout_garage($taux_horaire_id['id'],$nom_garage,$emplacement,$id_user );
             $message='votre garage a bien été ajouté';
             return $this->redirectToRoute('garage_index',['message'=>$message]);
@@ -87,18 +87,27 @@ class GarageController extends AbstractController
     #[Route('/{id}/edit', name: 'garage_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, GarageRepository $garageRepository, $id): Response
     {
+        // recuperer les info du garage a partir de l'id
+        $infoGarage=$garageRepository->info_garage($id);
+        // dump($infoGarage);
+        // dump($infoGarage['id']);
         $garage = new Garage();
         $defaultData = ['message' => 'Type your message here'];
         $form = $this->createFormBuilder($defaultData)
-            ->add('nom_garage', TextType::class)
-            ->add('Emplacement', TextType::class)
-            ->add('T1', TextType::class)
-            ->add('T2', TextType::class)
-            ->add('T3', TextType::class)
+            ->add('nom_garage', TextType::class,['data'=>$infoGarage['nom_garage']])
+            ->add('emplacement', TextType::class,['data'=>$infoGarage['emplacement']])
+            ->add('T1', TextType::class,['data'=>$infoGarage['t1']])
+            ->add('T2', TextType::class,['data'=>$infoGarage['t2']])
+            ->add('T3', TextType::class,['data'=>$infoGarage['t3']])
             ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $data = $form->getData();
+            //créer la fonction pour update le garage
+            // faire un update pour le garage
+            $garageRepository->update_garage($data['nom_garage'],$data['emplacement'],$infoGarage['id'] );
+            // faire un update pour le taux_horaire_id
+            $garageRepository->update_taux_horaire_garage($infoGarage['taux_horaire_id'],$data['T1'],$data['T2'],$data['T3']);
 
             return $this->redirectToRoute('garage_index');
         }

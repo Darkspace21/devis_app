@@ -87,6 +87,19 @@ class GarageRepository extends ServiceEntityRepository
             $stmt->execute(array(":user_id"=>$user_id,":garage_id"=>$garage_id));
             return $stmt->fetch();
         }
+        // prix et information d'un garage
+        public function info_garage($garage_id){
+            $conn = $this->getEntityManager()->getConnection();
+            $sql = 
+            "SELECT garage.*, taux_horaire.t1, taux_horaire.t2,taux_horaire.t3
+            from garage
+            inner join taux_horaire on taux_horaire.id = garage.taux_horaire_id
+            where garage.id=:garage_id
+            ";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(":garage_id"=>$garage_id));
+            return $stmt->fetch();
+        }
 
     // ajouter un garage pour un user 
     public function ajout_garage($taux_horaire_id,$nom_garage,$emplacement,$id_user ){
@@ -100,16 +113,34 @@ class GarageRepository extends ServiceEntityRepository
         $stmt->execute(array(":taux_horaire_id"=>$taux_horaire_id,":nom_garage"=>$nom_garage,"emplacement"=>$emplacement,"id_user"=>$id_user));
     }
 
+    /*
+    UPDATE table
+    SET nom_colonne_1 = 'nouvelle valeur'
+    WHERE condition
+    */
+
         // mise à jour d'un garage pour un user 
-        public function modifier_garage($taux_horaire_id,$nom_garage,$emplacement,$id_user ){
+        public function update_garage($nom_garage,$emplacement,$garage_id ){
             $conn = $this->getEntityManager()->getConnection();
             $sql = 
             "
-            update garage (taux_horaire_id, nom_garage, emplacement, id_user)
-            VALUES (:taux_horaire_id , :nom_garage , :emplacement, :id_user)
+            update garage set nom_garage=:nom_garage, emplacement=:emplacement
+            where id=:garage_id
             ";
             $stmt = $conn->prepare($sql);
-            $stmt->execute(array(":taux_horaire_id"=>$taux_horaire_id,":nom_garage"=>$nom_garage,"emplacement"=>$emplacement,"id_user"=>$id_user));
+            $stmt->execute(array(":nom_garage"=>$nom_garage,"emplacement"=>$emplacement,"garage_id"=>$garage_id));
+        }
+        
+        // mise à jour d'un taux_horaire pour un garage 
+        public function update_taux_horaire_garage($taux_horaire_id,$t1,$t2,$t3 ){
+            $conn = $this->getEntityManager()->getConnection();
+            $sql = 
+            "
+            update taux_horaire set t1=:t1, t2=:t2, t3=:t3 
+            where id=:taux_horaire_id  
+            ";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(":taux_horaire_id"=>$taux_horaire_id,":t1"=>$t1,"t2"=>$t2,"t3"=>$t3));
         }
 
     // /**

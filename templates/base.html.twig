@@ -52,23 +52,21 @@
 
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Security Demo</a>
+            <a class="navbar-brand" href="#">AutoDevis</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li class="nav-item" id="1">
-                            <a class="nav-link active" aria-current="page"
-                               href="{{ path('admin_dashboard') }}">Dashboard</a>
-                        </li>
-                    {% endif %}
                     {% if app.user is not null %}
+                    <li class="nav-item" id="devis">
+                        <a class="nav-link active" aria-current="page"
+                        href="{{ path('devis_index') }}">Devis</a>
+                    </li>
                     <li class="nav-item" id="2">
                         <a class="nav-link active" aria-current="page"
-                        href="{{ path('user_show', {'id': app.user.id}) }}">profil</a>
+                        href="{{ path('user_show', {'id': app.user.id}) }}">Profil</a>
                     </li>
                     <li class="nav-item" id="garage">
                         <a class="nav-link active" aria-current="page"
@@ -76,16 +74,16 @@
                     </li>
                     <li class="nav-item" id="deco">
                         <a class="nav-link active" aria-current="page"
-                           href="{{ path('app_logout') }}">deconnexion</a>
+                           href="{{ path('app_logout') }}">Deconnexion</a>
                     </li>
                     {% else %}
                     <li class="nav-item" id="connexion">
                         <a class="nav-link active" aria-current="page"
-                           href="{{ path('app_login') }}">connexion</a>
+                           href="{{ path('app_login') }}">Connexion</a>
                     </li>
                     <li class="nav-item" id="inscription">
                         <a class="nav-link active" aria-current="page"
-                           href="{{ path('app_register') }}">inscription</a>
+                           href="{{ path('app_register') }}">Inscription</a>
                     </li>
                     {% endif %}
     
