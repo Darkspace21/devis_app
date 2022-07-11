@@ -48,7 +48,7 @@ class DevisRepository extends ServiceEntityRepository
     public function liste_devis($user_id){
         $conn = $this->getEntityManager()->getConnection();
         $sql = "
-        Select devis.id, type_prestation.nom_prestation, garage.nom_garage, devis.prix 
+        Select devis.id, type_prestation.nom_prestation, garage.nom_garage, devis.prix, devis.date_rdv,devis.heure_rdv 
         from db_devis.devis
         inner join garage on garage.id= devis.garage_id
         inner join type_prestation on type_prestation.id =devis.type_prestation_id 
@@ -88,6 +88,17 @@ class DevisRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
+    }
+
+    public function ktypnrByImmat($immat){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+        select ktypnr from croisement_immatriculation
+        where immatriculation = :immat
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":immat"=>$immat));
+        return $stmt->fetch();
     }
 
     public function ktypnr($marque,$modele,$version){
@@ -169,15 +180,15 @@ class DevisRepository extends ServiceEntityRepository
         return $stmt->fetch();
     }
 
-    public function creer_devis($user_id,$type_prestation_id,$prix_total,$garage_id,$prix_main_oeuvre ){
+    public function creer_devis($user_id,$type_prestation_id,$prix_total,$garage_id,$prix_main_oeuvre,$date,$heure ){
         $conn = $this->getEntityManager()->getConnection();
         $sql = 
         "
-        INSERT INTO devis (user_id, type_prestation_id, prix, garage_id, main_oeuvre, date_creation)
-        VALUES (:user_id , :type_prestation_id , :prix_total, :garage_id, :prix_main_oeuvre, NOW())
+        INSERT INTO devis (user_id, type_prestation_id, prix, garage_id, main_oeuvre, date_creation, date_rdv, heure_rdv)
+        VALUES (:user_id , :type_prestation_id , :prix_total, :garage_id, :prix_main_oeuvre, NOW(), :date_rdv , :heure_rdv)
         ";
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array("user_id"=>$user_id,":garage_id"=>$garage_id,":type_prestation_id"=>$type_prestation_id,"prix_total"=>$prix_total,":prix_main_oeuvre"=>$prix_main_oeuvre));
+        $stmt->execute(array("user_id"=>$user_id,":garage_id"=>$garage_id,":type_prestation_id"=>$type_prestation_id,"prix_total"=>$prix_total,":prix_main_oeuvre"=>$prix_main_oeuvre,":date_rdv"=>$date,":heure_rdv"=>$heure));
     }
 
     // defini le temps pour changer une pieces données
@@ -202,6 +213,35 @@ class DevisRepository extends ServiceEntityRepository
         ";
         $stmt = $conn->prepare($sql);
         $stmt->execute(array("genartnr"=>$genartnr,":temps"=>$temps,":nom"=>$nom,"marque"=>$marque,":prix"=>$prix,":devis_id"=>$devis_id));
+    }
+
+    // prix et information du devis
+    public function info_devis($id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT user.nom, user.prenom, type_prestation.nom_prestation, devis.prix, garage.nom_garage, devis.main_oeuvre, devis.date_creation 
+        FROM `devis`
+        inner join type_prestation on  devis.type_prestation_id=type_prestation.id
+        inner join garage on garage.id=devis.garage_id
+        inner join user on devis.user_id=user.id
+        WHERE devis.id=:id;
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":id"=>$id));
+        return $stmt->fetch();
+    }
+    // prix et information des pièces devis
+    public function info_pieces_devis($id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 
+        "SELECT pieces_choisi.*
+        FROM `pieces_choisi` 
+        inner join devis on pieces_choisi.devis_id=devis.id 
+        WHERE devis.id=:id;
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(":id"=>$id));
+        return $stmt->fetchAll();
     }
 
     // /**

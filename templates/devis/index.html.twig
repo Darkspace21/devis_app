@@ -12,7 +12,7 @@
 {% block body %}
     <div class="espacement">
     {% if message is defined %}
-        {{message}}
+        <h1>{{message}}</h1>
     {% endif %}
     {{ parent() }}
     <h1>Devis index</h1>
@@ -23,6 +23,7 @@
                 <th>Type de prestation</th>
                 <th>Nom garage</th>
                 <th>Prix</th>
+                <th>Heure rendez-vous</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -33,6 +34,7 @@
                 <td>{{ devi.nom_prestation }}</td>
                 <td>{{ devi.nom_garage }}</td>
                 <td>{{ devi.prix }}</td>
+                <td>{{ devi.date_rdv}} à {{devi.heure_rdv}} h</td>
                 <td>
                     <a href="{{ path('devis_show', {'id': devi.id}) }}">afficher</a>
                     <a href="{{ path('devis_edit', {'id': devi.id}) }}">modifier</a>

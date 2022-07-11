@@ -68,6 +68,9 @@
                         <a class="nav-link active" aria-current="page"
                         href="{{ path('user_show', {'id': app.user.id}) }}">Profil</a>
                     </li>
+                    {# faire 2 eme if pour si c'est un garagiste ou pas #}
+                    {% if app.user.roles =='Garage' %}
+                    {% endif %}
                     <li class="nav-item" id="garage">
                         <a class="nav-link active" aria-current="page"
                            href="{{ path('garage_index') }}">Garage</a>

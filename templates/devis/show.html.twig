@@ -1,30 +1,66 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Devis{% endblock %}
+{% block head %}
+<style>
+    td,th{
+        width: 500px;
+        border: thin solid #000000;
+        padding-left: 1%;
+        height: 50px;
+        font-size: 18px;
+    }
+    table{
+        border-collapse:collapse;
+        border: thin solid #000000;
+    }
+    .gras{
+        font-weight: bold;
+    }
+    p{
+        font-size: 20px;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
     <h1>Devis</h1>
 
-    <table class="table">
+    <table>
+        <p>{{ devis.nom }} {{ devis.prenom }}</p>
+        <p> Nom garage : {{ devis.nom_garage }}</p>
+        <p>Créer le : {{devis.date_creation}}</p>
         <tbody>
+            <th>Nom</th>
+            <th>Type de pièce</th>
+            <th>Marque</th>
+            <th>Prix</th>
+                <tr><td class="gras">Liste des pieces</td><td><td></td></td></tr>
+                {% for piece in pieces_devis %}
+                
+                    <tr>
+                        <td></td>
+                        <td>{{ piece.nom }}</td> 
+                        <td>{{ piece.marque }}</td>
+                        <td>{{ piece.prix }}€</td>
+                    </tr>
+                
+                {% endfor %}
+
             <tr>
-                <th>Id</th>
-                <td>{{ devi.id }}</td>
+                <td class="gras">Main d'oeuvre</td>
+                <td></td>
+                <td></td>
+                <td>{{ devis.main_oeuvre }}€</td>
             </tr>
             <tr>
-                <th>Prix</th>
-                <td>{{ devi.prix }}</td>
-            </tr>
-            <tr>
-                <th>Nb_heure_total</th>
-                <td>{{ devi.nbHeureTotal }}</td>
+                <td class="gras">Prix TOTAL</td>
+                <td></td>
+                <td></td>
+                <td class="gras">{{ devis.prix }}€</td>
             </tr>
         </tbody>
     </table>
  
     <a href="{{ path('devis_index') }}">back to list</a>
-
-    <a href="{{ path('devis_edit', {'id': devi.id}) }}">edit</a>
-
-    {{ include('devis/_delete_form.html.twig') }}
 {% endblock %}

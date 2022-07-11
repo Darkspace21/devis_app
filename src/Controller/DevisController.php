@@ -80,8 +80,13 @@ class DevisController extends AbstractController
             //dump($_POST['marque']);
             //dump($_POST['TypePrestation']);
             if (isset($_POST['immat'])){
-                $data['immat']=$_POST['immat'];
-                // lancer la recherche pour avoir les infos de la voiture
+                $immat=strtoupper($_POST['immat']);
+
+                $ktpynr=$devisRepository->ktypnrByImmat($immat);
+
+                $liste_pieces=$devisRepository->pieces_necessaire($presta);
+
+                return $this->redirectToRoute('devis_new_liste_pieces', array('ktpynr' => $ktpynr,'liste_pieces'=>$liste_pieces,'presta'=>$presta));
                 // lancer la recherche pour les différents devis
                 
             }else{
@@ -97,10 +102,6 @@ class DevisController extends AbstractController
                 //dump($liste_pieces);
                 return $this->redirectToRoute('devis_new_liste_pieces', array('ktpynr' => $ktpynr,'liste_pieces'=>$liste_pieces,'presta'=>$presta));
             }
-            //afficher la liste des offres pour le véhicule et le type de presta
-            // envoyer le type de presta puis toutes les infos de la voiture afin de retourner les différent garage et les différents prix des garages
-            // le prix proposé est egal au prix de chaque pieces + le taux horaire de chaque pieces * le temps pour remplacer la piece.
-
         }
         
         return $this->render('devis/new.html.twig', [
@@ -196,14 +197,14 @@ class DevisController extends AbstractController
         $prix_total=$_POST['prix_total'];
         $presta=$_POST['presta'];
         $date=$_POST['date'];
-        $time=$_POST['time'];
-        $dateRDV = date('Y-m-d H:i:s', strtotime("$date $time"));
-        dump($dateRDV);
+        $heure=$_POST['heure'];
+        //dump($date);
+        //dump($heure);
         $presta_id= $typePrestationRepository->type_presta_id($presta);
         $user_id=$this->getUser()->getId();
         
         // on créer le devis
-        $devisRepository->creer_devis($user_id,$presta_id['id'],$prix_total,$garage_id,$prix_main_oeuvre);
+        $devisRepository->creer_devis($user_id,$presta_id['id'],$prix_total,$garage_id,$prix_main_oeuvre,$date,$heure);
         
         //on recupere l'id du devis
         $devis_id=$devisRepository->max_id_devis($user_id);
@@ -220,10 +221,13 @@ class DevisController extends AbstractController
     }
 
     #[Route('/{id}', name: 'devis_show', methods: ['GET'])]
-    public function show(Devis $devi): Response
+    public function show(DevisRepository $devisRepository, $id): Response
     {
+        $devis=$devisRepository->info_devis($id);
+        $pieces_devis=$devisRepository->info_pieces_devis($id);
         return $this->render('devis/show.html.twig', [
-            'devi' => $devi,
+            'devis' => $devis,
+            'pieces_devis' => $pieces_devis
         ]);
     }
 
