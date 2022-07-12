@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Edit Garage{% endblock %}
-
+{% block head %}
+{{ parent() }}
+<style>
+    .espacement{
+        margin-left: 5%;
+    }
+</style>
+{% endblock %}
 {% block body %}
+{{ parent() }}
+<div class="espacement">
     <h1>Edit Garage</h1>
 
     {{ include('garage/_form.html.twig', {'button_label': 'Update'}) }}
@@ -10,4 +19,5 @@
     <a href="{{ path('garage_index') }}">back to list</a>
 
     {# {{ include('garage/_delete_form.html.twig') }} #}
+</div>
 {% endblock %}

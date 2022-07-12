@@ -71,8 +71,10 @@ class DevisController extends AbstractController
             ])
             ->getForm();
         $form->handleRequest($request);
-        // dump($marque);
-        // die();
+        //dump($marque);
+        //dump($modele);
+        //dump($version);
+        //die();
        
         if ($form->isSubmitted()) {
             $data = $form->getData();

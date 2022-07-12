@@ -59,31 +59,25 @@
                 <td><br><br></td>
                 <td>
                     <div class="select">
-                        {% if version is defined and version !='' %}
-                            <select id="version" name="version">
-                                {# {% for Mar in marque %}
-                                <optgroup  label="{{Mar.marque}}"  
-                                    {% if modele is defined and modele !='' %}
-                                        {% for Mo in modele %}
-                                            {% if  Mar.marque == Mo.marque  %}
-                                                <optgroup label="{{Mo.modele}}">
-                                                {% if version is defined and version !='' %}
-                                                    {% for V in version %}
-                                                        {% if  Mo.modele == V.modele  %}
-                                                            <option value="{{V.marque}}/{{V.modele}}/{{V.version}}">{{V.version}}</option>
-                                                        {% endif %}
-                                                    {% endfor %} 
-                                                {% endif %}
-                                                </optgroup>
-                                            {% endif %}
-                                        {% endfor %} 
-                                    {% endif %}
-                                    </optgroup>
-                                {% endfor %} #}
-                                {% for V in version %}
-                                            <option value="{{V.marque}}/{{V.modele}}/{{V.version}}">{{V.marque}}/{{V.modele}}/{{V.version}}</option>
-                                {% endfor %}
-                            </select>
+                        {% if marque is defined and marque !='' %}
+                        <p><select id="marque" name="marque" onchange="update_modele()">
+                            {% for M in marque %}
+                                <option value="{{M.marque}}">{{M.marque}}</option>
+                            {% endfor %}
+                        </select>
+                        <input id="liste_modele"type="hidden" value="{{modele|json_encode()}}">
+                        <input id="liste_version"type="hidden" value="{{version|json_encode()}}">
+                        </p>
+                        <p>
+                        <select id="modele" name="modele"onchange="update_version()">
+                                <option value="{{modele[0].modele}}">{{modele[0].modele}}</option>
+                        </select>
+                        </p>
+                        <p>
+                        <select id="version" name="version">
+                                <option value="{{version[0].version}}">{{version[0].version}}</option>
+                        </select>
+                        </p>
                         {% endif %}
                     </div>
                 </td>
@@ -110,9 +104,51 @@
 {{ form_end(form,{'render_rest': false}) }}
 
 <script>
-    function bonjour(){
-        var selectedValue = document.getElementById("test1").value;
-        console.log(selectedValue);
+    function update_modele(){
+        var selectedValue = document.getElementById("marque").value;
+        //console.log(selectedValue);
+        var liste_modele= document.getElementById("liste_modele").value;
+        //console.log(liste_modele);
+        var modele=JSON.parse(liste_modele);
+        //console.log(modele);
+        var x = document.getElementById("modele");
+        for(var i in modele)
+        {
+            if (modele[i].marque==selectedValue){
+                var option = document.createElement("option");
+                option.value = modele[i].modele;
+                //console.log(option.value);
+                option.text = modele[i].modele;
+                x.add(option);
+            }
+        }
+        //console.log (modele_final);
+
+    }function update_version(){
+        var selectedValueModele = document.getElementById("modele").value;
+        var selectedValueMarque = document.getElementById("marque").value;
+        console.log(selectedValueModele);
+        var liste_version= document.getElementById("liste_version").value;
+        //console.log(liste_version);
+        var version=JSON.parse(liste_version);
+        //console.log(version);
+        var x = document.getElementById("version");
+        for(var i in version)
+        {
+            if (version[i].marque==selectedValueMarque){
+                //console.log(version[i]);
+                if (version[i].modele==selectedValueModele){
+                    //console.log(version[i].modele,version[i].version);
+                    var option = document.createElement("option");
+                    option.value = version[i].marque + "/" + version[i].modele + "/" + version[i].version;
+                    //console.log(option.value);
+                    option.text = version[i].version;
+                    x.add(option);
+                }
+                
+            }
+        }
+        //console.log (modele_final);
 
     }
 </script>
