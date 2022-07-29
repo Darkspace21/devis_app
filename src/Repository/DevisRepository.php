@@ -48,7 +48,7 @@ class DevisRepository extends ServiceEntityRepository
     public function liste_devis($user_id){
         $conn = $this->getEntityManager()->getConnection();
         $sql = "
-        Select devis.id, type_prestation.nom_prestation, garage.nom_garage, devis.prix, devis.date_rdv,devis.heure_rdv 
+        Select devis.id, type_prestation.nom_prestation, garage.nom_garage,garage.id as garage_id, devis.prix, devis.date_rdv,devis.heure_rdv 
         from db_devis.devis
         inner join garage on garage.id= devis.garage_id
         inner join type_prestation on type_prestation.id =devis.type_prestation_id 

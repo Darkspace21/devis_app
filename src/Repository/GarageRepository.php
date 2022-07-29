@@ -50,7 +50,7 @@ class GarageRepository extends ServiceEntityRepository
     public function liste_garage(){
         $conn = $this->getEntityManager()->getConnection();
         $sql = 
-        "SELECT * 
+        "SELECT garage.*, taux_horaire.t1,taux_horaire.t2,taux_horaire.t3
         from garage
         inner join taux_horaire on taux_horaire.id = garage.taux_horaire_id
         order by t1 asc,t2 asc,t3 asc
